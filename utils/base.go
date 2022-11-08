@@ -2,14 +2,20 @@ package utils
 
 import (
 	"archive/zip"
+	"crypto/sha256"
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
 
 	"github.com/LollipopKit/gofvm/consts"
+)
+
+var (
+	ErrUnsuppotedCompressFormat = fmt.Errorf("unsupported compress format")
 )
 
 func Contains[T string | int | int64 | float64](list []T, item T) bool {
@@ -122,4 +128,56 @@ func Symlink(src, dst string) error {
 func Exists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil || os.IsExist(err)
+}
+
+func Uncompress(src, dest string) error {
+	switch filepath.Ext(src) {
+	case ".zip":
+		if err := Unzip(src, dest); err != nil {
+			return err
+		}
+		return nil
+	case ".gz":
+		return Execute("tar", "-xzf", src, "-C", dest)
+	case ".xz":
+		return Execute("tar", "-xJf", src, "-C", dest)
+	}
+	return ErrUnsuppotedCompressFormat
+}
+
+func Execute(bin string, args ...string) error {
+	cmd := exec.Command(bin, args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	return cmd.Run()
+}
+
+func GetFileHash(path string) (string, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	h := sha256.New()
+	if _, err := io.Copy(h, f); err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%x", h.Sum(nil)), nil
+}
+
+func Confirm(question string, default_ bool) bool {
+	suffix := func() string {
+		if default_ {
+			return " [Y/n]"
+		}
+		return " [y/N]"
+	}()
+	print(fmt.Sprintf("%s%s: ", question, suffix))
+	var input string
+	fmt.Scanln(&input)
+	if input == "" {
+		return default_
+	}
+	return strings.ToLower(input) == "y"
 }

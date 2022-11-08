@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"os/exec"
 	"path"
 	"strings"
 
@@ -17,13 +18,17 @@ import (
 )
 
 var (
-	ErrPathNotSet = errors.New("FVM_PATH not set. \nPlease set it in ENV before using gofvm.")
+	ErrPathNotSet             = errors.New("FVM_PATH not set. \nPlease set it in ENV before using gofvm.")
+	ErrVersionNotInstalled    = errors.New("Version not installed. \nPlease install it before using.")
+	ErrUnsupportedShellPrefix = "Unsupported shell: "
 
 	envNames4JudgeInChina = map[string][]string{
 		"TZ":     {"Asia/Shanghai", "Asia/Chongqing"},
 		"LC_ALL": {"zh_CN.UTF-8", "zh_CN.GB18030", "zh_CN.GBK"},
 		"LANG":   {"zh_CN.UTF-8", "zh_CN.GB18030", "zh_CN.GBK"},
 	}
+
+	IsInChina *bool
 )
 
 func Precheck() error {
@@ -33,7 +38,7 @@ func Precheck() error {
 	return nil
 }
 
-func InChina() bool {
+func InChina(notify bool) bool {
 	china := false
 	for envName, envValues := range envNames4JudgeInChina {
 		envValue := os.Getenv(envName)
@@ -44,23 +49,28 @@ func InChina() bool {
 			}
 		}
 	}
+
+	if IsInChina == nil {
+		result := Confirm("Do you want to use the mirror in China?", china)
+		IsInChina = &result
+	}
+
+	if china && notify {
+		term.Yellow("Using mirror site " + consts.ReleaseChinaUrlPrefix)
+	}
 	return china
 }
 
 func GetReleases() (releases []model.Release, err error) {
 	goarch := GetArch()
 	goos := GetOS()
-	inChina := InChina()
+	inChina := InChina(true)
 	url := func() string {
 		if inChina {
 			return fmt.Sprintf(consts.ReleaseChinaJsonUrlFmt, goos)
 		}
 		return fmt.Sprintf(consts.ReleaseJsonUrlFmt, goos)
 	}()
-
-	if inChina {
-		term.Yellow("Using mirror site " + consts.ReleaseChinaUrlPrefix)
-	}
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -112,19 +122,6 @@ func GetReleaseByVersion(releases []model.Release, version string) (r model.Rele
 }
 
 func Install(r model.Release) error {
-	url := consts.ReleaseDownloadUrlPrefix + r.Archive
-	term.Cyan("Downloading " + url)
-
-	resp, err := http.Get(url)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("Download failed: %s", resp.Status)
-	}
-
 	tmp := strings.Split(r.Archive, "/")
 	if len(tmp) < 3 {
 		return fmt.Errorf("Invalid archive name: %s", r.Archive)
@@ -132,19 +129,58 @@ func Install(r model.Release) error {
 	fileName := tmp[2]
 
 	zipPath := path.Join(Path(), fileName)
-	out, err := os.Create(zipPath)
+
+	download := true
+	if Exists(zipPath) {
+		hash, err := GetFileHash(zipPath)
+		if err != nil {
+			return err
+		}
+		if hash == r.Sha256 {
+			term.Yellow("Archive already exists, skip downloading.")
+			download = false
+		} else {
+			term.Yellow("Archive already exists, but hash not match, will download again.")
+		}
+	}
+
+	if download {
+		url := func() string {
+			if InChina(false) {
+				return consts.ReleaseChinaUrlPrefix + consts.ReleasePath + r.Archive
+			}
+			return consts.ReleaseUrlPrefix + consts.ReleasePath + r.Archive
+		}()
+		term.Cyan("Downloading " + url)
+
+		resp, err := http.Get(url)
+		if err != nil {
+			return err
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			return fmt.Errorf("Download failed: %s", resp.Status)
+		}
+
+		out, err := os.Create(zipPath)
+		if err != nil {
+			return err
+		}
+		defer out.Close()
+
+		_, err = io.Copy(out, resp.Body)
+		if err != nil {
+			return err
+		}
+	}
+
+	term.Cyan("Uncompressing " + fileName)
+	err := os.Mkdir(path.Join(Path(), r.Version), 0755)
 	if err != nil {
 		return err
 	}
-	defer out.Close()
-
-	_, err = io.Copy(out, resp.Body)
-	if err != nil {
-		return err
-	}
-
-	term.Cyan("Unzipping " + fileName)
-	err = Unzip(zipPath, path.Join(Path(), r.Version))
+	err = Uncompress(zipPath, path.Join(Path(), r.Version))
 	if err != nil {
 		return err
 	}
@@ -159,10 +195,91 @@ func Install(r model.Release) error {
 }
 
 func Use(version string) error {
-	if !Exists(path.Join(Path(), version)) {
-		return fmt.Errorf("Version %s not found", version)
+	installPath := path.Join(Path(), version, "flutter")
+	if !Exists(installPath) {
+		return ErrVersionNotInstalled
 	}
+
+	dst := path.Join(Path(), "global")
 	term.Cyan("Using Flutter " + version)
 
-	return os.Symlink(path.Join(Path(), version), path.Join(Path(), "current"))
+	err := Execute("ln", "-sf", installPath, dst)
+	if err != nil {
+		return err
+	}
+
+	err = Test()
+	if err != nil {
+		term.Yellow("\nIt seems like that you have to config PATH.")
+		unsupport := false
+		confirm := Confirm("Do you want to automatically config PATH?", true)
+		if confirm {
+			err = ConfigPath()
+			if err != nil {
+				if strings.Contains(err.Error(), ErrUnsupportedShellPrefix) {
+					unsupport = true
+					term.Yellow("Sorry, your shell is not supported.")
+				} else {
+					return err
+				}
+			}
+		}
+		if unsupport || !confirm {
+			term.Yellow("Please add the following line to your shell config file:\n\nexport PATH=$PATH:" + path.Join(Path(), "global", "bin"))
+		}
+	}
+
+	return nil
+}
+
+func Test() error {
+	cmd := exec.Command("flutter")
+	return cmd.Run()
+}
+
+func ConfigPath() error {
+	term.Cyan("\nConfiguring PATH...")
+	shell := os.Getenv("SHELL")
+	if shell == "" {
+		return fmt.Errorf("Can not get SHELL env")
+	}
+
+	shellConfigFile := ""
+	switch shell {
+	case "/bin/bash":
+		shellConfigFile = path.Join(os.Getenv("HOME"), ".bashrc")
+	case "/bin/zsh", "/usr/bin/zsh":
+		shellConfigFile = path.Join(os.Getenv("HOME"), ".zshrc")
+	default:
+		return fmt.Errorf(ErrUnsupportedShellPrefix+"%s", shell)
+	}
+
+	if !Exists(shellConfigFile) {
+		return fmt.Errorf("Shell config file not found: %s", shellConfigFile)
+	}
+
+	content, err := ioutil.ReadFile(shellConfigFile)
+	if err != nil {
+		return err
+	}
+
+	line2Add := "export PATH=$PATH:" + path.Join(Path(), "global", "bin")
+	lines := strings.Split(string(content), "\n")
+	if Contains(lines, line2Add) {
+		term.Yellow("PATH already configured. Skip.")
+		return nil
+	}
+
+	f, err := os.OpenFile(shellConfigFile, os.O_APPEND|os.O_WRONLY, 0600)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	if _, err = f.WriteString("\n" + line2Add); err != nil {
+		return err
+	}
+
+	term.Cyan("Please run following command to reload shell config file:\n\nsource " + shellConfigFile)
+	return nil
 }

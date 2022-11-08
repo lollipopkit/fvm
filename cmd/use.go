@@ -19,13 +19,18 @@ func init() {
 }
 
 func handleUse(ctx *cli.Context) error {
-	if ctx.Args().Len() != 1 {
+	args := ctx.Args()
+	if args.Len() != 1 {
 		term.Yellow("Usage: " + ctx.Command.UsageText)
 	}
 
-	err := utils.Use(ctx.Args().Get(0))
+	err := utils.Use(args.Get(0))
 	if err != nil {
-		return err
+		if err == utils.ErrVersionNotInstalled {
+			term.Yellow(err.Error())
+		} else {
+			return err
+		}
 	}
 
 	return nil
