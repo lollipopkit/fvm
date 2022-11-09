@@ -51,7 +51,7 @@ func InChina(notify bool) bool {
 	}
 
 	if IsInChina == nil {
-		result := Confirm("Do you want to use the mirror in China?", china)
+		result := term.Confirm("Do you want to use mirror site in China?", china)
 		IsInChina = &result
 	}
 
@@ -212,7 +212,7 @@ func Global(version string) error {
 	if err != nil {
 		term.Yellow("\nIt seems like that you have to config PATH.")
 		unsupport := false
-		confirm := Confirm("Do you want to automatically config PATH?", true)
+		confirm := term.Confirm("Do you want to automatically config PATH?", true)
 		if confirm {
 			err = ConfigPath()
 			if err != nil {
@@ -251,7 +251,7 @@ func Use(v string) error {
 		return err
 	}
 
-	return nil
+	return ConfigIde()
 }
 
 func Test() error {

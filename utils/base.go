@@ -165,19 +165,3 @@ func GetFileHash(path string) (string, error) {
 
 	return fmt.Sprintf("%x", h.Sum(nil)), nil
 }
-
-func Confirm(question string, default_ bool) bool {
-	suffix := func() string {
-		if default_ {
-			return " [Y/n]"
-		}
-		return " [y/N]"
-	}()
-	print(fmt.Sprintf("%s%s: ", question, suffix))
-	var input string
-	fmt.Scanln(&input)
-	if input == "" {
-		return default_
-	}
-	return strings.ToLower(input) == "y"
-}
