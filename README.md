@@ -1,18 +1,18 @@
 ## FVM Go
 Flutter Version Manager written in Go.
 
-### Features
+### 🍦 Features
 - [x] Manage Multiple Flutter SDKs
 - [x] Project Versioning
 - [x] **Portable** - No need to install Flutter SDK to install fvm
 
 
-### Installation
+### 💾 Installation
 - Download the latest release from [HERE](https://github.com/lollipopkit/gofvm/releases)
 - `go install github.com/lollipopkit/gofvm@latest`
 
 
-### CLI
+### ⚒️ CLI
 ```
 NAME:
    gofvm - Flutter Version Manager written in Go

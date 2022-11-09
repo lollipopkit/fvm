@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/lollipopkit/gofvm/consts"
+	"github.com/lollipopkit/gofvm/term"
 )
 
 var (
@@ -123,6 +124,17 @@ func Symlink(src, dst string) error {
 		return err
 	}
 	return nil
+}
+
+func IsSymlink(name string) (bool, error) {
+	info, err := os.Lstat(name)
+	if os.IsNotExist(err) {
+		return false, err
+	} else if err != nil {
+		term.Yellow("Error when check symlink: " + err.Error())
+		return false, err
+	}
+	return (info.Mode() & os.ModeSymlink) != 0, nil
 }
 
 func Exists(path string) bool {

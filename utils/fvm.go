@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -53,6 +52,10 @@ func InChina(notify bool) bool {
 	if IsInChina == nil {
 		result := term.Confirm("Do you want to use mirror site in China?", china)
 		IsInChina = &result
+		err := SaveConfig()
+		if err != nil {
+			term.Red("Save config failed: " + err.Error(), true)
+		}
 	}
 
 	if china && notify {
@@ -127,6 +130,13 @@ func Install(r model.Release) error {
 		return fmt.Errorf("Invalid archive name: %s", r.Archive)
 	}
 	fileName := tmp[2]
+	if IsVersionInstalled(r.Version) {
+		term.Yellow("\nVersion " + r.Version + " already installed")
+		redownload := term.Confirm("Do you want to redownload it?", false)
+		if !redownload {
+			return nil
+		}
+	}
 
 	zipPath := path.Join(Path(), fileName)
 
@@ -153,23 +163,7 @@ func Install(r model.Release) error {
 		}()
 		term.Cyan("Downloading " + url)
 
-		resp, err := http.Get(url)
-		if err != nil {
-			return err
-		}
-		defer resp.Body.Close()
-
-		if resp.StatusCode != http.StatusOK {
-			return fmt.Errorf("Download failed: %s", resp.Status)
-		}
-
-		out, err := os.Create(zipPath)
-		if err != nil {
-			return err
-		}
-		defer out.Close()
-
-		_, err = io.Copy(out, resp.Body)
+		err := Execute("wget", "-O", zipPath, url)
 		if err != nil {
 			return err
 		}
@@ -304,4 +298,9 @@ func ConfigPath() error {
 
 	term.Cyan("Please run following command to reload shell config file:\n\nsource " + shellConfigFile)
 	return nil
+}
+
+func IsVersionInstalled(version string) bool {
+	installPath := path.Join(Path(), version, "flutter")
+	return Exists(installPath)
 }

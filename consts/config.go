@@ -3,7 +3,7 @@ package consts
 const (
 	VSC_CONFIG = `
 {
-	"dart.flutterSdkPath": ".fvm/flutter_sdk",
+	"dart.flutterSdkPath": ".fvm",
 	"search.exclude": {
 	  "**/.fvm": true
 	},
