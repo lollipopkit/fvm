@@ -41,3 +41,8 @@ COMMANDS:
 GLOBAL OPTIONS:
    --help, -h  show help (default: false)
 ```
+
+### 📝 License
+```
+lollipopkit LPGL-3.0
+```
