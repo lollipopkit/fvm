@@ -1,10 +1,11 @@
 ## Go FVM
-Flutter Version Manager written in Go.
+Flutter SDK Version Manager written in Go.
 
 ### 🍦 Features
 - [x] Manage Multiple Flutter SDKs
 - [x] Project Versioning
 - [x] **Portable** - No need to install Flutter SDK to install fvm
+- [x] Auto config PATH and IDE settings
 
 
 ### 💾 Installation
