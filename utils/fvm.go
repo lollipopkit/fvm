@@ -194,7 +194,7 @@ func Install(r model.Release) error {
 	return nil
 }
 
-func Use(version string) error {
+func Global(version string) error {
 	installPath := path.Join(Path(), version, "flutter")
 	if !Exists(installPath) {
 		return ErrVersionNotInstalled
@@ -229,6 +229,28 @@ func Use(version string) error {
 		}
 	}
 
+	return nil
+}
+
+func Use(v string) error {
+	installPath := path.Join(Path(), v, "flutter")
+	if !Exists(installPath) {
+		return ErrVersionNotInstalled
+	}
+
+	wd, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+
+	dst := path.Join(wd, consts.FVM_DIR_NAME)
+	term.Cyan("Using Flutter " + v)
+
+	err = Execute("ln", "-sf", installPath, dst)
+	if err != nil {
+		return err
+	}
+	
 	return nil
 }
 

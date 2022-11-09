@@ -1,13 +1,37 @@
 package cmd
 
-import "github.com/urfave/cli/v2"
+import (
+	"io/ioutil"
+
+	"github.com/LollipopKit/gofvm/consts"
+	"github.com/LollipopKit/gofvm/term"
+	"github.com/LollipopKit/gofvm/utils"
+	"github.com/urfave/cli/v2"
+)
 
 func init() {
 	cmds = append(cmds, &cli.Command{
-		Name:  "list",
-		Usage: "List all installed versions of Flutter",
-		Action: func(ctx *cli.Context) error {
-			return nil
-		},
+		Name:      "list",
+		Aliases:   []string{"l"},
+		Usage:     "List all installed versions of Flutter",
+		UsageText: consts.APP_NAME + " list",
+		Action:    handleList,
 	})
+}
+
+func handleList(ctx *cli.Context) error {
+	p := utils.Path()
+	dirs, err := ioutil.ReadDir(p)
+	if err != nil {
+		return err
+	}
+
+	term.Cyan("Installed versions:")
+	for _, dir := range dirs {
+		if dir.IsDir() {
+			println(dir.Name())
+		}
+	}
+	
+	return nil
 }

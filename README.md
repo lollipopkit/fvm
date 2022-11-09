@@ -1,0 +1,30 @@
+## FVM Go
+Documentation can be found at [HERE](https://fvm.app/)
+
+
+#### Installation
+- Download the latest release from [HERE](https://github.com/LollipopKit/gofvm/releases)
+- `go install github.com/LollipopKit/gofvm@latest`
+
+
+#### CLI
+```
+NAME:
+   gofvm - Flutter Version Manager written in Go
+
+USAGE:
+   gofvm [global options] command [command options] [arguments...]
+
+COMMANDS:
+   dart, d     Proxy dart commands
+   flutter, f  Proxy flutter commands
+   global, g   Manage global version of Flutter
+   install, i  Install a specific version of Flutter
+   list, l     List all installed versions of Flutter
+   release, r  List all releases of Flutter
+   use, u      Use a specific version of Flutter
+   help, h     Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --help, -h  show help (default: false)
+```

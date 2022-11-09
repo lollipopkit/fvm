@@ -1,13 +1,37 @@
 package cmd
 
-import "github.com/urfave/cli/v2"
+import (
+	"os"
+	"path"
+
+	"github.com/LollipopKit/gofvm/consts"
+	"github.com/LollipopKit/gofvm/utils"
+	"github.com/urfave/cli/v2"
+)
 
 func init() {
 	cmds = append(cmds, &cli.Command{
-		Name:  "flutter",
-		Usage: "Proxy flutter commands",
-		Action: func(ctx *cli.Context) error {
-			return nil
-		},
+		Name:      "flutter",
+		Aliases:   []string{"f"},
+		Usage:     "Proxy flutter commands",
+		UsageText: consts.APP_NAME + " flutter [command]",
+		Action:    handleFlutter,
 	})
+}
+
+func handleFlutter(ctx *cli.Context) error {
+	args := ctx.Args().Slice()
+
+	pwd, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+
+	wdFvm := path.Join(pwd, consts.FVM_DIR_NAME)
+	if utils.Exists(wdFvm) {
+		err = utils.Execute(path.Join(wdFvm, "bin/flutter"), args...)
+	} else {
+		err = utils.Execute("dart", args...)
+	}
+	return err
 }
