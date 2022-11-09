@@ -1,4 +1,4 @@
-## FVM Go
+## Go FVM
 Flutter Version Manager written in Go.
 
 ### 🍦 Features
@@ -11,6 +11,14 @@ Flutter Version Manager written in Go.
 - Download the latest release from [HERE](https://github.com/lollipopkit/gofvm/releases)
 - `go install github.com/lollipopkit/gofvm@latest`
 
+### 🔖 Attention
+- Under normal conditions: 
+   1. Install `fvm` through `go install` or download the binary file. 
+   2. It's highly recommended to set env `FVM_HOME`. If you don't set `FVM_HOME`, fvm will use `$HOME/.fvm` as default.
+   3. Run `fvm install <version>` to install flutter sdk.
+   4. Enter project folder, run `fvm use <version>` to use flutter sdk.
+- This tool is largely compatible with `fvm-dart`, but there are still some differences. You may need to reconfigure the environment as described above.
+- This tool is still in the early stage of development. If you encounter any problems, please submit an issue.
 
 ### ⚒️ CLI
 ```
