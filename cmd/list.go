@@ -20,8 +20,7 @@ func init() {
 }
 
 func handleList(ctx *cli.Context) error {
-	p := utils.Path()
-	dirs, err := ioutil.ReadDir(p)
+	dirs, err := ioutil.ReadDir(utils.FvmHome)
 	if err != nil {
 		return err
 	}

@@ -1,6 +1,6 @@
 package consts
 
 const (
-	PATH_NAME = "FVM_PATH"
-	APP_NAME  = "gofvm"
+	FVM_HOME = "FVM_HOME"
+	APP_NAME = "gofvm"
 )

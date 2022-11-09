@@ -17,7 +17,15 @@ import (
 
 var (
 	ErrUnsuppotedCompressFormat = fmt.Errorf("unsupported compress format")
+	FvmHome = os.Getenv(consts.FVM_HOME)
 )
+
+func init() {
+	if FvmHome == "" {
+		FvmHome = os.Getenv("HOME") + "/.fvm"
+		term.Yellow("FVM_HOME is not set, using default path: " + FvmHome)
+	}
+}
 
 func Contains[T string | int | int64 | float64](list []T, item T) bool {
 	for _, v := range list {
@@ -46,12 +54,8 @@ func GetOS() string {
 	return goos
 }
 
-func Path() string {
-	return os.Getenv(consts.PATH_NAME)
-}
-
 func GetVersionDir(v string) string {
-	return Path() + "/" + v
+	return FvmHome + "/" + v
 }
 
 // Copy from https://stackoverflow.com/questions/20357223/easy-way-to-unzip-file-with-golang
@@ -120,10 +124,7 @@ func Unzip(src, dest string) error {
 }
 
 func Symlink(src, dst string) error {
-	if err := os.Symlink(src, dst); err != nil {
-		return err
-	}
-	return nil
+	return Execute("ln", "-sf", src, dst)
 }
 
 func IsSymlink(name string) (bool, error) {

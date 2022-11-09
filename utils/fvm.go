@@ -17,7 +17,6 @@ import (
 )
 
 var (
-	ErrPathNotSet             = errors.New("FVM_PATH not set. \nPlease set it in ENV before using gofvm.")
 	ErrVersionNotInstalled    = errors.New("Version not installed. \nPlease install it before using.")
 	ErrUnsupportedShellPrefix = "Unsupported shell: "
 
@@ -29,13 +28,6 @@ var (
 
 	IsInChina *bool
 )
-
-func Precheck() error {
-	if os.Getenv(consts.PATH_NAME) == "" {
-		return ErrPathNotSet
-	}
-	return nil
-}
 
 func InChina(notify bool) bool {
 	china := false
@@ -54,7 +46,7 @@ func InChina(notify bool) bool {
 		IsInChina = &result
 		err := SaveConfig()
 		if err != nil {
-			term.Red("Save config failed: " + err.Error(), true)
+			term.Red("Save config failed: "+err.Error(), true)
 		}
 	}
 
@@ -138,7 +130,7 @@ func Install(r model.Release) error {
 		}
 	}
 
-	zipPath := path.Join(Path(), fileName)
+	zipPath := path.Join(FvmHome, fileName)
 
 	download := true
 	if Exists(zipPath) {
@@ -170,11 +162,11 @@ func Install(r model.Release) error {
 	}
 
 	term.Cyan("Uncompressing " + fileName)
-	err := os.Mkdir(path.Join(Path(), r.Version), 0755)
+	err := os.Mkdir(path.Join(FvmHome, r.Version), 0755)
 	if err != nil {
 		return err
 	}
-	err = Uncompress(zipPath, path.Join(Path(), r.Version))
+	err = Uncompress(zipPath, path.Join(FvmHome, r.Version))
 	if err != nil {
 		return err
 	}
@@ -189,15 +181,15 @@ func Install(r model.Release) error {
 }
 
 func Global(version string) error {
-	installPath := path.Join(Path(), version, "flutter")
+	installPath := path.Join(FvmHome, version, "flutter")
 	if !Exists(installPath) {
 		return ErrVersionNotInstalled
 	}
 
-	dst := path.Join(Path(), "global")
+	dst := path.Join(FvmHome, "global")
 	term.Cyan("Using Flutter " + version)
 
-	err := Execute("ln", "-sf", installPath, dst)
+	err := Symlink(installPath, dst)
 	if err != nil {
 		return err
 	}
@@ -219,7 +211,7 @@ func Global(version string) error {
 			}
 		}
 		if unsupport || !confirm {
-			term.Yellow("Please add the following line to your shell config file:\n\nexport PATH=$PATH:" + path.Join(Path(), "global", "bin"))
+			term.Yellow("Please add the following line to your shell config file:\n\nexport PATH=$PATH:" + path.Join(FvmHome, "global", "bin"))
 		}
 	}
 
@@ -227,7 +219,7 @@ func Global(version string) error {
 }
 
 func Use(v string) error {
-	installPath := path.Join(Path(), v, "flutter")
+	installPath := path.Join(FvmHome, v, "flutter")
 	if !Exists(installPath) {
 		return ErrVersionNotInstalled
 	}
@@ -279,7 +271,7 @@ func ConfigPath() error {
 		return err
 	}
 
-	line2Add := "export PATH=$PATH:" + path.Join(Path(), "global", "bin")
+	line2Add := "export PATH=$PATH:" + path.Join(FvmHome, "global", "bin")
 	lines := strings.Split(string(content), "\n")
 	if Contains(lines, line2Add) {
 		term.Yellow("PATH already configured. Skip.")
@@ -301,6 +293,6 @@ func ConfigPath() error {
 }
 
 func IsVersionInstalled(version string) bool {
-	installPath := path.Join(Path(), version, "flutter")
+	installPath := path.Join(FvmHome, version, "flutter")
 	return Exists(installPath)
 }
