@@ -57,7 +57,6 @@ func InChina(notify bool) bool {
 }
 
 func GetReleases() (releases []model.Release, err error) {
-	goarch := GetArch()
 	goos := GetOS()
 	inChina := InChina(true)
 	url := func() string {
@@ -83,35 +82,27 @@ func GetReleases() (releases []model.Release, err error) {
 		return
 	}
 
-	archs := []string{}
-	for idx := range allReleases.Releases {
-		a := allReleases.Releases[idx].DartSdkArch
-		if !Contains(archs, a) {
-			archs = append(archs, a)
-		}
-	}
-
-	if !Contains(archs, goarch) {
-		err = fmt.Errorf("Supported archs: %v, but your arch: %s", archs, goarch)
-		return
-	}
-
-	for idx := range allReleases.Releases {
-		if allReleases.Releases[idx].DartSdkArch == goarch {
-			releases = append(releases, allReleases.Releases[idx])
-		}
-	}
+	releases = allReleases.Releases
 
 	return
 }
 
 func GetReleaseByVersion(releases []model.Release, version string) (r model.Release, err error) {
+	arch := GetArch()
+	AGAIN:
 	for _, v := range releases {
-		if v.Version == version {
+		if v.Version == version && arch == v.DartSdkArch {
 			r = v
 			return
 		}
 	}
+
+	if arch == "arm64" {
+		term.Yellow("No arm64 version found, will use x64 version.")
+		arch = "x64"
+		goto AGAIN
+	}
+	
 	err = fmt.Errorf("Version %s not found", version)
 	return
 }
