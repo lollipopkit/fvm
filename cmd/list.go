@@ -3,9 +3,9 @@ package cmd
 import (
 	"io/ioutil"
 
-	"github.com/LollipopKit/gofvm/consts"
-	"github.com/LollipopKit/gofvm/term"
-	"github.com/LollipopKit/gofvm/utils"
+	"github.com/lollipopkit/gofvm/consts"
+	"github.com/lollipopkit/gofvm/term"
+	"github.com/lollipopkit/gofvm/utils"
 	"github.com/urfave/cli/v2"
 )
 
@@ -32,6 +32,6 @@ func handleList(ctx *cli.Context) error {
 			println(dir.Name())
 		}
 	}
-	
+
 	return nil
 }

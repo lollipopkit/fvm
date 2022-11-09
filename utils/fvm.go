@@ -12,9 +12,9 @@ import (
 	"path"
 	"strings"
 
-	"github.com/LollipopKit/gofvm/consts"
-	"github.com/LollipopKit/gofvm/model"
-	"github.com/LollipopKit/gofvm/term"
+	"github.com/lollipopkit/gofvm/consts"
+	"github.com/lollipopkit/gofvm/model"
+	"github.com/lollipopkit/gofvm/term"
 )
 
 var (
@@ -250,7 +250,7 @@ func Use(v string) error {
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
 }
 

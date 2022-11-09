@@ -3,8 +3,8 @@ Documentation can be found at [HERE](https://fvm.app/)
 
 
 #### Installation
-- Download the latest release from [HERE](https://github.com/LollipopKit/gofvm/releases)
-- `go install github.com/LollipopKit/gofvm@latest`
+- Download the latest release from [HERE](https://github.com/lollipopkit/gofvm/releases)
+- `go install github.com/lollipopkit/gofvm@latest`
 
 
 #### CLI

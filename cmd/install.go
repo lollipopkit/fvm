@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"github.com/LollipopKit/gofvm/consts"
-	"github.com/LollipopKit/gofvm/term"
-	"github.com/LollipopKit/gofvm/utils"
+	"github.com/lollipopkit/gofvm/consts"
+	"github.com/lollipopkit/gofvm/term"
+	"github.com/lollipopkit/gofvm/utils"
 	"github.com/urfave/cli/v2"
 )
 

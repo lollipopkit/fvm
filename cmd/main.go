@@ -3,8 +3,8 @@ package cmd
 import (
 	"os"
 
-	"github.com/LollipopKit/gofvm/consts"
-	"github.com/LollipopKit/gofvm/term"
+	"github.com/lollipopkit/gofvm/consts"
+	"github.com/lollipopkit/gofvm/term"
 	"github.com/urfave/cli/v2"
 )
 

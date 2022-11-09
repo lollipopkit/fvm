@@ -4,8 +4,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/LollipopKit/gofvm/consts"
-	"github.com/LollipopKit/gofvm/utils"
+	"github.com/lollipopkit/gofvm/consts"
+	"github.com/lollipopkit/gofvm/utils"
 	"github.com/urfave/cli/v2"
 )
 

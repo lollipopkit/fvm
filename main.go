@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/LollipopKit/gofvm/cmd"
-	"github.com/LollipopKit/gofvm/term"
-	"github.com/LollipopKit/gofvm/utils"
+	"github.com/lollipopkit/gofvm/cmd"
+	"github.com/lollipopkit/gofvm/term"
+	"github.com/lollipopkit/gofvm/utils"
 )
 
 func main() {

@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/LollipopKit/gofvm/consts"
+	"github.com/lollipopkit/gofvm/consts"
 )
 
 var (
