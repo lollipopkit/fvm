@@ -233,11 +233,11 @@ func Use(v string) error {
 		term.Success("Removed old version: " + dst)
 	}
 
-	err = Execute("ln", "-sf", installPath, dst)
+	err = Symlink(installPath, dst)
 	if err != nil {
 		return err
 	}
-	term.Success("Added symlink: " + dst)
+	term.Success("Added symlink: " + installPath + " -> " + dst)
 
 	if err = ConfigIde(); err != nil {
 		return err

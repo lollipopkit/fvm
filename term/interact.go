@@ -19,7 +19,7 @@ func Confirm(question string, default_ bool) bool {
 		}
 		return " [y/N]"
 	}()
-	Info(fmt.Sprintf("%s%s: ", question, suffix))
+	InfoNln(fmt.Sprintf("%s%s: ", question, suffix))
 	input := ReadLine()
 	if input == "" {
 		return default_
@@ -30,10 +30,10 @@ func Confirm(question string, default_ bool) bool {
 func Option(question string, options []string, default_ int) int {
 	println()
 	for i := range options {
-		print(fmt.Sprintf("%d. %s ", i+1, options[i]))
+		print(fmt.Sprintf("%d. %s\n", i+1, options[i]))
 	}
-	suffix := fmt.Sprintf(" [default: %d]", default_+1)
-	Info(fmt.Sprintf("%s %s:", question, suffix))
+	suffix := fmt.Sprintf("[default %d]", default_+1)
+	InfoNln(fmt.Sprintf("%s %s:", question, suffix))
 	input := ReadLine()
 	if input == "" {
 		return default_

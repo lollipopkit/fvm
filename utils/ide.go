@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 
@@ -36,9 +37,9 @@ func vscode() error {
 	}
 
 	println()
-	term.Info("Content write to " + consts.VscodeSettingPath)
 	print(string(bytes))
-	write := term.Confirm("\nConfirm?", true)
+
+	write := term.Confirm(fmt.Sprintf("\nWrite above content into \"%s\"?", consts.VscodeSettingPath), true)
 	if write {
 		if !Exists(consts.VscodeDirName) {
 			err = os.Mkdir(consts.VscodeDirName, 0755)
@@ -46,7 +47,6 @@ func vscode() error {
 				return err
 			}
 		}
-		term.Success("Config success!")
 		return ioutil.WriteFile(consts.VscodeSettingPath, bytes, 0644)
 	}
 	return nil
