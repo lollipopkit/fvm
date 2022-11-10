@@ -31,7 +31,7 @@ func vscode() error {
 		combined[k] = v.Value()
 	}
 
-	bytes, err := json.Marshal(combined)
+	bytes, err := json.MarshalIndent(combined, "", "  ")
 	if err != nil {
 		return err
 	}
@@ -58,6 +58,13 @@ func idea() error {
 }
 
 func ConfigIde() error {
+	if Exists(consts.VscodeDirName) {
+		return vscode()
+	}
+	if Exists(consts.IdeaDirName) {
+		return idea()
+	}
+
 	options := []string{"VSCode", "IDEA", "skip"}
 	idx := term.Option("Which IDE do you want to auto config?", options, len(options)-1)
 	switch idx {

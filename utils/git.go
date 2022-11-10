@@ -16,7 +16,7 @@ func ConfigGitIgnore() error {
 	}
 
 	gitIgnoreFile := path.Join(wd, ".gitignore")
-	term.Info("\nConfiguring \".gitignore...\"")
+	term.Info("\nConfiguring \".gitignore\"...")
 	if Exists(gitIgnoreFile) {
 		f, err := os.OpenFile(gitIgnoreFile, os.O_APPEND|os.O_RDWR, 0600)
 		if err != nil {
