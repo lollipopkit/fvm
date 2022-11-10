@@ -2,7 +2,7 @@
 <p align="center">Flutter SDK Version Manager written in Go.</p>
 
 <p align="center">
-    <img alt="badge-lang" src="https://badgen.net/badge/FVM/0.0.4/cyan">
+    <img alt="badge-lang" src="https://badgen.net/badge/FVM/0.0.6/cyan">
     <img alt="badge-lang" src="https://badgen.net/badge/Go/1.19/purple">
 </p>
 
@@ -38,6 +38,7 @@ USAGE:
    fvm [global options] command [command options] [arguments...]
 
 COMMANDS:
+   config, c   Config something
    dart, d     Proxy dart commands
    flutter, f  Proxy flutter commands
    global, g   Manage global version of Flutter

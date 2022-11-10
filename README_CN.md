@@ -2,7 +2,7 @@
 <p align="center">Flutter SDK 版本管理工具 - Golang实现</p>
 
 <p align="center">
-    <img alt="badge-lang" src="https://badgen.net/badge/FVM/0.0.4/cyan">
+    <img alt="badge-lang" src="https://badgen.net/badge/FVM/0.0.6/cyan">
     <img alt="badge-lang" src="https://badgen.net/badge/Go/1.19/purple">
 </p>
 
@@ -38,6 +38,7 @@
    fvm [全局选项] 命令 [选项] [参数...]
 
 命令:
+   config, c   更改某些配置
    dart, d     代理dart命令
    flutter, f  代理flutter命令
    global, g   设置全局默认Flutter SDK版本
