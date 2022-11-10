@@ -14,7 +14,6 @@ func init() {
 		Name:      "dart",
 		Aliases:   []string{"d"},
 		Usage:     "Proxy dart commands",
-		UsageText: consts.APP_NAME + " dart [command]",
 		Action:    handleDart,
 	})
 }

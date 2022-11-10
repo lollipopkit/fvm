@@ -14,7 +14,6 @@ func init() {
 		Name:      "flutter",
 		Aliases:   []string{"f"},
 		Usage:     "Proxy flutter commands",
-		UsageText: consts.APP_NAME + " flutter [command]",
 		Action:    handleFlutter,
 	})
 }
