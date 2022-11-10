@@ -11,7 +11,7 @@ import (
 )
 
 func ConfigPath() error {
-	term.Cyan("\nConfiguring PATH...")
+	term.Info("\nConfiguring PATH...")
 	shell := os.Getenv("SHELL")
 	if shell == "" {
 		return fmt.Errorf("Can not get SHELL env")
@@ -53,7 +53,7 @@ func configPath4Bash(shellConfigFile string) error {
 	line2Add := "export PATH=$PATH:" + path.Join(FvmHome, "global", "bin")
 	lines := strings.Split(string(content), "\n")
 	if Contains(lines, line2Add) {
-		term.Yellow("PATH already configured. Skip.")
+		term.Warn("PATH already configured. Skip.")
 		return nil
 	}
 
@@ -67,7 +67,7 @@ func configPath4Bash(shellConfigFile string) error {
 		return err
 	}
 
-	term.Cyan("Please run following command to reload shell config file:\n\nsource " + shellConfigFile)
+	term.Info("Please run following command to reload shell config file:\n\nsource " + shellConfigFile)
 	return nil
 }
 
@@ -84,7 +84,7 @@ func configPath4Fish(shellConfigFile string) error {
 	line2Add := "set PATH " + path.Join(FvmHome, "global", "bin") + "$PATH"
 	lines := strings.Split(string(content), "\n")
 	if Contains(lines, line2Add) {
-		term.Yellow("PATH already configured. Skip.")
+		term.Warn("PATH already configured. Skip.")
 		return nil
 	}
 
@@ -99,6 +99,6 @@ func configPath4Fish(shellConfigFile string) error {
 		return err
 	}
 
-	term.Cyan("Please run following command to reload shell config file:\n\nsource " + shellConfigFile)
+	term.Info("Please run following command to reload shell config file:\n\nsource " + shellConfigFile)
 	return nil
 }

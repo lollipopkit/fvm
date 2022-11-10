@@ -46,12 +46,12 @@ func InChina(notify bool) bool {
 		IsInChina = &result
 		err := SaveConfig()
 		if err != nil {
-			term.Red("Save config failed: "+err.Error(), true)
+			term.Error("Save config failed: "+err.Error(), true)
 		}
 	}
 
 	if china && notify {
-		term.Yellow("Using mirror site " + consts.ReleaseChinaUrlPrefix)
+		term.Info("Using mirror site " + consts.ReleaseChinaUrlPrefix)
 	}
 	return china
 }
@@ -98,7 +98,7 @@ AGAIN:
 	}
 
 	if arch == "arm64" {
-		term.Yellow("No arm64 version found, will use x64 version.")
+		term.Warn("No arm64 version found, will use x64 version.")
 		arch = "x64"
 		goto AGAIN
 	}
@@ -114,7 +114,7 @@ func Install(r model.Release) error {
 	}
 	fileName := tmp[2]
 	if IsVersionInstalled(r.Version) {
-		term.Yellow("\nVersion " + r.Version + " already installed")
+		term.Warn("\nVersion " + r.Version + " already installed")
 		redownload := term.Confirm("Do you want to redownload it?", false)
 		if !redownload {
 			return nil
@@ -130,10 +130,10 @@ func Install(r model.Release) error {
 			return err
 		}
 		if hash == r.Sha256 {
-			term.Yellow("Archive already exists, skip downloading.")
+			term.Warn("Archive already exists, skip downloading.")
 			download = false
 		} else {
-			term.Yellow("Archive already exists, but hash not match, will download again.")
+			term.Warn("Archive already exists, but hash not match, will download again.")
 		}
 	}
 
@@ -144,7 +144,7 @@ func Install(r model.Release) error {
 			}
 			return consts.ReleaseUrlPrefix + consts.ReleasePath + r.Archive
 		}()
-		term.Cyan("Downloading " + url)
+		term.Info("Downloading " + url)
 
 		err := Execute("wget", "-O", zipPath, url)
 		if err != nil {
@@ -152,7 +152,7 @@ func Install(r model.Release) error {
 		}
 	}
 
-	term.Cyan("Uncompressing " + fileName)
+	term.Info("Uncompressing " + fileName)
 	err := os.Mkdir(path.Join(FvmHome, r.Version), 0755)
 	if err != nil {
 		return err
@@ -162,11 +162,13 @@ func Install(r model.Release) error {
 		return err
 	}
 
-	term.Cyan("Removing " + fileName)
+	term.Info("Removing " + fileName)
 	err = os.Remove(zipPath)
 	if err != nil {
 		return err
 	}
+
+	term.Success("Version " + r.Version + " installed successfully")
 
 	return nil
 }
@@ -178,7 +180,7 @@ func Global(version string) error {
 	}
 
 	dst := path.Join(FvmHome, "global")
-	term.Cyan("Using Flutter " + version)
+	term.Info("Using Flutter " + version)
 
 	err := Symlink(installPath, dst)
 	if err != nil {
@@ -187,7 +189,7 @@ func Global(version string) error {
 
 	err = Test()
 	if err != nil {
-		term.Yellow("\nIt seems like that you have to config PATH.")
+		term.Warn("\nIt seems like that you have to config PATH.")
 		unsupport := false
 		confirm := term.Confirm("Do you want to automatically config PATH?", true)
 		if confirm {
@@ -195,14 +197,14 @@ func Global(version string) error {
 			if err != nil {
 				if strings.Contains(err.Error(), ErrUnsupportedShellPrefix) {
 					unsupport = true
-					term.Yellow("Sorry, your shell is not supported.")
+					term.Warn("Sorry, your shell is not supported.")
 				} else {
 					return err
 				}
 			}
 		}
 		if unsupport || !confirm {
-			term.Yellow("Please add the following line to your shell config file:\n\nexport PATH=$PATH:" + path.Join(FvmHome, "global", "bin"))
+			term.Info("Please add the following line to your shell config file:\n\nexport PATH=$PATH:" + path.Join(FvmHome, "global", "bin"))
 		}
 	}
 
@@ -221,12 +223,21 @@ func Use(v string) error {
 	}
 
 	dst := path.Join(wd, consts.FVM_DIR_NAME)
-	term.Cyan("Using Flutter " + v)
+	term.Info("Using Flutter " + v)
+
+	if Exists(dst) {
+		err = os.RemoveAll(dst)
+		if err != nil {
+			return err
+		}
+		term.Success("Removed old version: " + dst)
+	}
 
 	err = Execute("ln", "-sf", installPath, dst)
 	if err != nil {
 		return err
 	}
+	term.Success("Added symlink: " + dst)
 
 	if err = ConfigIde(); err != nil {
 		return err

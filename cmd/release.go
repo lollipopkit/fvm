@@ -47,10 +47,10 @@ func handleRelease(ctx *cli.Context) error {
 	}
 	sort.Strings(majorVersions)
 
-	term.Cyan("\nFlutter releases:")
+	term.Info("\nFlutter releases:")
 
 	for _, majorVersion := range majorVersions {
-		term.Green(fmt.Sprintf("[%s.x]:", majorVersion))
+		term.Success(fmt.Sprintf("[%s.x]:", majorVersion))
 		count := 0
 		printText := ""
 		for idx := range majorVersionsMap[majorVersion] {
@@ -63,7 +63,7 @@ func handleRelease(ctx *cli.Context) error {
 
 		print(printText)
 		if count > 5 {
-			term.Yellow(fmt.Sprintf("...and %d more", len(majorVersionsMap[majorVersion])-count))
+			term.Warn(fmt.Sprintf("...and %d more", len(majorVersionsMap[majorVersion])-count))
 		}
 		println()
 	}

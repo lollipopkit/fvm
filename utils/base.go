@@ -23,12 +23,12 @@ var (
 func init() {
 	if FvmHome == "" {
 		FvmHome = os.Getenv("HOME") + "/.fvm"
-		term.Yellow("FVM_HOME is not set, using default path: " + FvmHome)
+		term.Warn("FVM_HOME is not set, using default path: " + FvmHome)
 	}
 	if !Exists(FvmHome) {
 		err := os.MkdirAll(FvmHome, 0755)
 		if err != nil {
-			term.Red("Failed to create FVM_HOME: " + FvmHome)
+			term.Error("Failed to create FVM_HOME: " + FvmHome)
 			os.Exit(1)
 		}
 	}
@@ -139,7 +139,7 @@ func IsSymlink(name string) (bool, error) {
 	if os.IsNotExist(err) {
 		return false, err
 	} else if err != nil {
-		term.Yellow("Error when check symlink: " + err.Error())
+		term.Warn("Error when check symlink: " + err.Error())
 		return false, err
 	}
 	return (info.Mode() & os.ModeSymlink) != 0, nil

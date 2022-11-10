@@ -25,7 +25,7 @@ func handleList(ctx *cli.Context) error {
 		return err
 	}
 
-	term.Cyan("Installed versions:")
+	term.Info("Installed versions:")
 	for _, dir := range dirs {
 		if dir.IsDir() {
 			println(dir.Name())

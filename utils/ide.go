@@ -36,7 +36,7 @@ func vscode() error {
 	}
 
 	println()
-	term.Cyan("Content write to " + consts.VscodeSettingPath)
+	term.Info("Content write to " + consts.VscodeSettingPath)
 	print(string(bytes))
 	write := term.Confirm("\nConfirm?", true)
 	if write {
@@ -46,14 +46,14 @@ func vscode() error {
 				return err
 			}
 		}
-		term.Green("Config success!")
+		term.Success("Config success!")
 		return ioutil.WriteFile(consts.VscodeSettingPath, bytes, 0644)
 	}
 	return nil
 }
 
 func idea() error {
-	term.Yellow("IDEA is not supported yet")
+	term.Warn("IDEA is not supported yet")
 	return nil
 }
 

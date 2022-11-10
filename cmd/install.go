@@ -20,7 +20,7 @@ func init() {
 
 func handleInstall(ctx *cli.Context) error {
 	if ctx.Args().Len() != 1 {
-		term.Yellow("Usage: " + ctx.Command.UsageText)
+		term.Warn("Usage: " + ctx.Command.UsageText)
 	}
 
 	releases, err := utils.GetReleases()
@@ -34,11 +34,11 @@ func handleInstall(ctx *cli.Context) error {
 
 	version := ctx.Args().Get(0)
 	if !utils.Contains(vs, version) {
-		term.Yellow("Version [" + version + "] is not available")
+		term.Warn("Version [" + version + "] is not available")
 		return nil
 	}
 
-	term.Cyan("Installing version [" + version + "]...")
+	term.Info("Installing version [" + version + "]...")
 	r, err := utils.GetReleaseByVersion(releases, version)
 	if err != nil {
 		return err

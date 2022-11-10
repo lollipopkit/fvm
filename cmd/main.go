@@ -28,6 +28,6 @@ func Run() {
 	}
 
 	if err := app.Run(os.Args); err != nil {
-		term.Red(err.Error(), true)
+		term.Error(err.Error(), true)
 	}
 }

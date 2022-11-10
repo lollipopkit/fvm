@@ -16,7 +16,7 @@ func ConfigGitIgnore() error {
 	}
 
 	gitIgnoreFile := path.Join(wd, ".gitignore")
-	term.Cyan("\nConfiguring .gitignore...")
+	term.Info("Configuring .gitignore...")
 	if Exists(gitIgnoreFile) {
 		f, err := os.OpenFile(gitIgnoreFile, os.O_APPEND|os.O_RDWR, 0600)
 		if err != nil {
@@ -35,15 +35,15 @@ func ConfigGitIgnore() error {
 			if _, err = f.WriteString("\n" + line2Add); err != nil {
 				return err
 			}
-			term.Green("Configured .gitignore")
+			term.Success("Configured .gitignore")
 		} else {
-			term.Yellow(".gitignore already configured. Skip.")
+			term.Warn(".gitignore already configured. Skip.")
 		}
 	} else {
 		if err := ioutil.WriteFile(gitIgnoreFile, []byte(".fvm"), 0644); err != nil {
 			return err
 		}
-		term.Green("Configured .gitignore")
+		term.Success("Configured .gitignore")
 	}
 	return nil
 }
