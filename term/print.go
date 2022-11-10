@@ -5,12 +5,12 @@ import (
 )
 
 const (
-	red     = "\033[31m"
-	green   = "\033[32m"
-	yellow  = "\033[33m"
-	blue    = "\033[34m"
-	cyan    = "\033[36m"
-	white   = "\033[37m"
+	red     = "\033[91m"
+	green   = "\033[92m"
+	yellow  = "\033[93m"
+	blue    = "\033[94m"
+	cyan    = "\033[96m"
+	white   = "\033[97m"
 	noColor = "\033[0m"
 )
 
