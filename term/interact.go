@@ -30,9 +30,9 @@ func Confirm(question string, default_ bool) bool {
 func Option(question string, options []string, default_ int) int {
 	println()
 	for i := range options {
-		print(fmt.Sprintf("%d. %s ", i + 1, options[i]))
+		print(fmt.Sprintf("%d. %s ", i+1, options[i]))
 	}
-	suffix := fmt.Sprintf(" [default: %d]", default_ + 1)
+	suffix := fmt.Sprintf(" [default: %d]", default_+1)
 	Cyan(fmt.Sprintf("%s %s:", question, suffix))
 	input := ReadLine()
 	if input == "" {

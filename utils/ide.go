@@ -19,7 +19,7 @@ func vscode() error {
 		}
 
 		now = gjson.ParseBytes(data)
-		
+
 	}
 	add := gjson.Parse(consts.VSC_CONFIG)
 	combined := map[string]any{}
@@ -65,8 +65,6 @@ func ConfigIde() error {
 		return vscode()
 	case 1:
 		return idea()
-	default:
-		term.Yellow("Skip...")
 	}
 	return nil
 }

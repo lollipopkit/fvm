@@ -17,7 +17,7 @@ import (
 
 var (
 	ErrUnsuppotedCompressFormat = fmt.Errorf("unsupported compress format")
-	FvmHome = os.Getenv(consts.FVM_HOME)
+	FvmHome                     = os.Getenv(consts.FVM_HOME)
 )
 
 func init() {
