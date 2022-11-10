@@ -32,10 +32,10 @@ English | [简体中文](README_CN.md)
 ### ⚒️ CLI
 ```
 NAME:
-   gofvm - Flutter Version Manager written in Go
+   fvm - Flutter Version Manager written in Go
 
 USAGE:
-   gofvm [global options] command [command options] [arguments...]
+   fvm [global options] command [command options] [arguments...]
 
 COMMANDS:
    dart, d     Proxy dart commands

@@ -32,10 +32,10 @@
 ### ⚒️ 命令行
 ```
 名称:
-   gofvm - Flutter SDK 版本管理工具 - Golang实现
+   fvm - Flutter SDK 版本管理工具 - Golang实现
 
 使用:
-   gofvm [全局选项] 命令 [选项] [参数...]
+   fvm [全局选项] 命令 [选项] [参数...]
 
 命令:
    dart, d     代理dart命令
