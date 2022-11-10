@@ -2,14 +2,18 @@ package cmd
 
 import (
 	"fmt"
+	"regexp"
 	"sort"
-	"strings"
 
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/model"
 	"github.com/lollipopkit/fvm/term"
 	"github.com/lollipopkit/fvm/utils"
 	"github.com/urfave/cli/v2"
+)
+
+var (
+	majorVersionReg = regexp.MustCompile(`^v?(\d+)\.\S+$`)
 )
 
 func init() {
@@ -30,24 +34,24 @@ func handleRelease(ctx *cli.Context) error {
 
 	majorVersionsMap := make(map[string][]model.Release, 0)
 	for idx := range releases {
-		v := strings.Split(releases[idx].Version, ".")
-		if len(v) < 3 {
+		m := majorVersionReg.FindStringSubmatch(releases[idx].Version)
+		if len(m) < 2 {
 			continue
 		}
-		majorVersion := v[0]
+		majorVersion := m[1]
 		if _, ok := majorVersionsMap[majorVersion]; !ok {
 			majorVersionsMap[majorVersion] = []model.Release{releases[idx]}
 		} else {
 			majorVersionsMap[majorVersion] = append(majorVersionsMap[majorVersion], releases[idx])
 		}
 	}
+
 	majorVersions := make([]string, 0)
 	for k := range majorVersionsMap {
 		majorVersions = append(majorVersions, k)
 	}
 	sort.Strings(majorVersions)
-
-	term.Info("\nFlutter releases:")
+	println()
 
 	for _, majorVersion := range majorVersions {
 		term.Success(fmt.Sprintf("[%s.x]:", majorVersion))
