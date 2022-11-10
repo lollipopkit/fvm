@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/lollipopkit/gofvm/consts"
-	"github.com/lollipopkit/gofvm/term"
+	"github.com/lollipopkit/fvm/consts"
+	"github.com/lollipopkit/fvm/term"
 	"github.com/tidwall/gjson"
 )
 

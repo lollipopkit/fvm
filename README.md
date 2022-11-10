@@ -17,8 +17,8 @@ English | [简体中文](README_CN.md)
 
 
 ### 💾 Installation
-- Download the latest release from [HERE](https://github.com/lollipopkit/gofvm/releases)
-- `go install github.com/lollipopkit/gofvm@latest`
+- Download the latest release from [HERE](https://github.com/lollipopkit/fvm/releases)
+- `go install github.com/lollipopkit/fvm@latest`
 
 ### 🔖 Attention
 - Under normal conditions: 

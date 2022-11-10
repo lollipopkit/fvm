@@ -3,9 +3,9 @@ package cmd
 import (
 	"io/ioutil"
 
-	"github.com/lollipopkit/gofvm/consts"
-	"github.com/lollipopkit/gofvm/term"
-	"github.com/lollipopkit/gofvm/utils"
+	"github.com/lollipopkit/fvm/consts"
+	"github.com/lollipopkit/fvm/term"
+	"github.com/lollipopkit/fvm/utils"
 	"github.com/urfave/cli/v2"
 )
 

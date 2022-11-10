@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/lollipopkit/gofvm/cmd"
+	"github.com/lollipopkit/fvm/cmd"
 )
 
 func main() {

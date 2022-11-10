@@ -17,8 +17,8 @@
 
 
 ### 💾 安装
-- 从 [这里](https://github.com/lollipopkit/gofvm/releases) 下载最新二进制文件
-- 一键安装（需要Go环境）： `go install github.com/lollipopkit/gofvm@latest`
+- 从 [这里](https://github.com/lollipopkit/fvm/releases) 下载最新二进制文件
+- 一键安装（需要Go环境）： `go install github.com/lollipopkit/fvm@latest`
 
 ### 🔖 注意
 - 通常情况下: 

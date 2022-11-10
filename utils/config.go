@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"path"
 
-	"github.com/lollipopkit/gofvm/model"
+	"github.com/lollipopkit/fvm/model"
 )
 
 var (

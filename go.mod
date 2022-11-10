@@ -1,4 +1,4 @@
-module github.com/lollipopkit/gofvm
+module github.com/lollipopkit/fvm
 
 go 1.18
 
