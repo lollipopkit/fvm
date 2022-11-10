@@ -10,15 +10,12 @@ import (
 )
 
 var (
-	config      model.Config
+	Config      model.Config
 	ErrNoConfig = errors.New("No config file")
 )
 
 func init() {
-	err := GetConfig()
-	if err == nil {
-		IsInChina = &config.InChina
-	}
+	GetConfig()
 }
 
 func GetConfig() error {
@@ -26,7 +23,7 @@ func GetConfig() error {
 	if Exists(configPath) {
 		data, err := ioutil.ReadFile(configPath)
 		if err == nil {
-			err = json.Unmarshal(data, &config)
+			err = json.Unmarshal(data, &Config)
 		}
 		return err
 	}
@@ -35,7 +32,7 @@ func GetConfig() error {
 
 func SaveConfig() error {
 	configPath := path.Join(FvmHome, "config.json")
-	data, err := json.Marshal(config)
+	data, err := json.Marshal(Config)
 	if err == nil {
 		err = ioutil.WriteFile(configPath, data, 0644)
 	}

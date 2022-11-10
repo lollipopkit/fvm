@@ -11,10 +11,10 @@ import (
 
 func init() {
 	cmds = append(cmds, &cli.Command{
-		Name:      "flutter",
-		Aliases:   []string{"f"},
-		Usage:     "Proxy flutter commands",
-		Action:    handleFlutter,
+		Name:    "flutter",
+		Aliases: []string{"f"},
+		Usage:   "Proxy flutter commands",
+		Action:  handleFlutter,
 	})
 }
 

@@ -17,8 +17,7 @@ import (
 )
 
 var (
-	ErrVersionNotInstalled    = errors.New("Version not installed. \nPlease install it before using.")
-	ErrUnsupportedShellPrefix = "Unsupported shell: "
+	ErrVersionNotInstalled = errors.New("Version not installed. \nPlease install it before using.")
 
 	envNames4JudgeInChina = map[string][]string{
 		"TZ":     {"Asia/Shanghai", "Asia/Chongqing"},
@@ -26,39 +25,41 @@ var (
 		"LANG":   {"zh_CN.UTF-8", "zh_CN.GB18030", "zh_CN.GBK"},
 	}
 
-	IsInChina *bool
 )
 
-func InChina(notify bool) bool {
-	china := false
-	for envName, envValues := range envNames4JudgeInChina {
-		envValue := os.Getenv(envName)
-		for _, v := range envValues {
-			if envValue == v {
-				china = true
+func JudgeUseMirror(notify bool) bool {
+	if Config.UseMirror == nil {
+		china := false
+		for envName, envValues := range envNames4JudgeInChina {
+			envValue := os.Getenv(envName)
+			for _, v := range envValues {
+				if envValue == v {
+					china = true
+					break
+				}
+			}
+			if china {
 				break
 			}
 		}
-	}
 
-	if IsInChina == nil {
 		result := term.Confirm("Do you want to use mirror site in China?", china)
-		IsInChina = &result
+		Config.UseMirror = &result
 		err := SaveConfig()
 		if err != nil {
 			term.Error("Save config failed: "+err.Error(), true)
 		}
 	}
 
-	if china && notify {
+	if *Config.UseMirror && notify {
 		term.Info("Using mirror site " + consts.ReleaseChinaUrlPrefix)
 	}
-	return china
+	return *Config.UseMirror
 }
 
 func GetReleases() (releases []model.Release, err error) {
 	goos := GetOS()
-	inChina := InChina(true)
+	inChina := JudgeUseMirror(true)
 	url := func() string {
 		if inChina {
 			return fmt.Sprintf(consts.ReleaseChinaJsonUrlFmt, goos)
@@ -139,7 +140,7 @@ func Install(r model.Release) error {
 
 	if download {
 		url := func() string {
-			if InChina(false) {
+			if JudgeUseMirror(false) {
 				return consts.ReleaseChinaUrlPrefix + consts.ReleasePath + r.Archive
 			}
 			return consts.ReleaseUrlPrefix + consts.ReleasePath + r.Archive

@@ -8,7 +8,6 @@ const (
 	noColor = "\033[0m"
 )
 
-
 func Error(s string, noPanic ...bool) {
 	if len(noPanic) > 0 && noPanic[0] {
 		print(red + s + noColor + "\n")

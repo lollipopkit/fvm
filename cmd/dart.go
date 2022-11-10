@@ -11,10 +11,10 @@ import (
 
 func init() {
 	cmds = append(cmds, &cli.Command{
-		Name:      "dart",
-		Aliases:   []string{"d"},
-		Usage:     "Proxy dart commands",
-		Action:    handleDart,
+		Name:    "dart",
+		Aliases: []string{"d"},
+		Usage:   "Proxy dart commands",
+		Action:  handleDart,
 	})
 }
 

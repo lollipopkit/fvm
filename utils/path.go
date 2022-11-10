@@ -10,6 +10,10 @@ import (
 	"github.com/lollipopkit/fvm/term"
 )
 
+var (
+	ErrUnsupportedShellPrefix = "Unsupported shell: "
+)
+
 func ConfigPath() error {
 	term.Info("\nConfiguring PATH...")
 	shell := os.Getenv("SHELL")
