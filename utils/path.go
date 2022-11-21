@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"fmt"
+	"errors"
 	"io/ioutil"
 	"os"
 	"path"
@@ -11,40 +11,26 @@ import (
 )
 
 var (
-	ErrUnsupportedShellPrefix = "Unsupported shell: "
+	ErrUnsupportedShell = errors.New("Unsupported shell: " + ShellName)
 )
 
 func ConfigPath() error {
-	shell := GetShell()
-
-	shellConfigFile := ""
-	switch shell {
-	case ShellTypeBash:
-		shellConfigFile = path.Join(os.Getenv("HOME"), ".bashrc")
-	case ShellTypeZsh:
-		shellConfigFile = path.Join(os.Getenv("HOME"), ".zshrc")
-	case ShellTypeFish:
-		shellConfigFile = path.Join(os.Getenv("HOME"), ".config", "fish", "config.fish")
-	default:
-		return fmt.Errorf(ErrUnsupportedShellPrefix+"%s", shell.String())
-	}
-
-	switch shell {
+	switch Shell {
 	case ShellTypeZsh, ShellTypeBash:
-		return configPath4Bash(shellConfigFile)
+		return configPath4Bash()
 	case ShellTypeFish:
-		return configPath4Fish(shellConfigFile)
+		return configPath4Fish()
 	default:
-		return fmt.Errorf(ErrUnsupportedShellPrefix+"%s", shell)
+		return ErrUnsupportedShell
 	}
 }
 
-func configPath4Bash(shellConfigFile string) error {
-	if !Exists(shellConfigFile) {
-		return fmt.Errorf("Shell config file not found: %s", shellConfigFile)
+func configPath4Bash() error {
+	if !Exists(RcPath) {
+		return ErrShellConfigNotFound
 	}
 
-	content, err := ioutil.ReadFile(shellConfigFile)
+	content, err := ioutil.ReadFile(RcPath)
 	if err != nil {
 		return err
 	}
@@ -56,7 +42,7 @@ func configPath4Bash(shellConfigFile string) error {
 		return nil
 	}
 
-	f, err := os.OpenFile(shellConfigFile, os.O_APPEND|os.O_WRONLY, 0600)
+	f, err := os.OpenFile(RcPath, os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
 		return err
 	}
@@ -66,16 +52,16 @@ func configPath4Bash(shellConfigFile string) error {
 		return err
 	}
 
-	term.Info("Please run following command to reload shell config file:\n\nsource " + shellConfigFile)
+	term.Info("Please run following command to reload shell config file:\n\nsource " + RcPath)
 	return nil
 }
 
-func configPath4Fish(shellConfigFile string) error {
-	if !Exists(shellConfigFile) {
-		return fmt.Errorf("Shell config file not found: %s", shellConfigFile)
+func configPath4Fish() error {
+	if !Exists(RcPath) {
+		return ErrShellConfigNotFound
 	}
 
-	content, err := ioutil.ReadFile(shellConfigFile)
+	content, err := ioutil.ReadFile(RcPath)
 	if err != nil {
 		return err
 	}
@@ -87,7 +73,7 @@ func configPath4Fish(shellConfigFile string) error {
 		return nil
 	}
 
-	f, err := os.OpenFile(shellConfigFile, os.O_APPEND|os.O_WRONLY, 0600)
+	f, err := os.OpenFile(RcPath, os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
 		return err
 	}
@@ -98,6 +84,6 @@ func configPath4Fish(shellConfigFile string) error {
 		return err
 	}
 
-	term.Info("Please run following command to reload shell config file:\n\nsource " + shellConfigFile)
+	term.Info("Please run following command to reload shell config file:\n\nsource " + RcPath)
 	return nil
 }

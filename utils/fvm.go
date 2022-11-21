@@ -24,7 +24,6 @@ var (
 		"LC_ALL": {"zh_CN.UTF-8", "zh_CN.GB18030", "zh_CN.GBK"},
 		"LANG":   {"zh_CN.UTF-8", "zh_CN.GB18030", "zh_CN.GBK"},
 	}
-
 )
 
 func JudgeUseMirror(notify bool) bool {
@@ -47,7 +46,7 @@ func JudgeUseMirror(notify bool) bool {
 		Config.UseMirror = &result
 		err := SaveConfig()
 		if err != nil {
-			term.Error("Save config failed: "+err.Error())
+			term.Error("Save config failed: " + err.Error())
 		}
 	}
 
@@ -195,7 +194,7 @@ func Global(version string) error {
 		if confirm {
 			err = ConfigPath()
 			if err != nil {
-				if strings.Contains(err.Error(), ErrUnsupportedShellPrefix) {
+				if err == ErrUnsupportedShell {
 					unsupport = true
 					term.Warn("Sorry, your shell is not supported.")
 				} else {
@@ -223,7 +222,7 @@ func Use(v string) error {
 		return err
 	}
 
-	dst := path.Join(wd, consts.FVM_DIR_NAME)
+	dst := path.Join(wd, consts.FvmDirName)
 
 	if Exists(dst) {
 		err = os.RemoveAll(dst)

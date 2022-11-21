@@ -1,11 +1,23 @@
 package utils
 
 import (
+	"errors"
 	"os"
 	"path"
+
+	"github.com/lollipopkit/fvm/consts"
+)
+
+var (
+	Shell     = GetShell()
+	RcPath    = Shell.RcPath()
+	ShellName = Shell.String()
+
+	ErrShellConfigNotFound = errors.New("Shell config file not found: " + RcPath)
 )
 
 type ShellType uint8
+
 const (
 	ShellTypeUnknown ShellType = iota
 	ShellTypeBash
@@ -18,7 +30,7 @@ func GetShell() ShellType {
 	if shell == "" {
 		return ShellTypeUnknown
 	}
-	
+
 	shell = path.Base(shell)
 	switch shell {
 	case "zsh":
@@ -42,5 +54,18 @@ func (s ShellType) String() string {
 		return "fish"
 	default:
 		return "unknown"
+	}
+}
+
+func (s ShellType) RcPath() string {
+	switch s {
+	case ShellTypeZsh:
+		return path.Join(consts.HOME, consts.ZshRcName)
+	case ShellTypeBash:
+		return path.Join(consts.HOME, consts.BashRcName)
+	case ShellTypeFish:
+		return path.Join(consts.HOME, consts.FishConfigPath)
+	default:
+		return ""
 	}
 }

@@ -26,7 +26,7 @@ func handleDart(ctx *cli.Context) error {
 		return err
 	}
 
-	wdFvm := path.Join(pwd, consts.FVM_DIR_NAME)
+	wdFvm := path.Join(pwd, consts.FvmDirName)
 	if utils.Exists(wdFvm) {
 		err = utils.Execute(path.Join(wdFvm, "bin/dart"), args...)
 	} else {

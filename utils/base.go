@@ -22,7 +22,7 @@ var (
 
 func init() {
 	if FvmHome == "" {
-		FvmHome = os.Getenv("HOME") + "/.fvm"
+		FvmHome = consts.HOME + "/.fvm"
 		term.Warn("FVM_HOME is not set, using default path: " + FvmHome)
 	}
 	if !Exists(FvmHome) {
