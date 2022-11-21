@@ -13,10 +13,11 @@ import (
 var (
 	Config      model.Config
 	ErrNoConfig = errors.New("No config file")
-	configPath  = path.Join(FvmHome, consts.ConfigFileName)
+	configPath  = ""
 )
 
 func init() {
+	configPath = path.Join(FvmHome, consts.ConfigFileName)
 	GetConfig()
 }
 
