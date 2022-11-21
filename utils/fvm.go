@@ -47,7 +47,7 @@ func JudgeUseMirror(notify bool) bool {
 		Config.UseMirror = &result
 		err := SaveConfig()
 		if err != nil {
-			term.Error("Save config failed: "+err.Error(), true)
+			term.Error("Save config failed: "+err.Error())
 		}
 	}
 
@@ -122,11 +122,11 @@ func Install(r model.Release) error {
 		}
 	}
 
-	zipPath := path.Join(FvmHome, fileName)
+	archieve := path.Join(FvmHome, fileName)
 
 	download := true
-	if Exists(zipPath) {
-		hash, err := GetFileHash(zipPath)
+	if Exists(archieve) {
+		hash, err := GetFileHash(archieve)
 		if err != nil {
 			return err
 		}
@@ -147,7 +147,7 @@ func Install(r model.Release) error {
 		}()
 		term.Info("Downloading " + url)
 
-		err := Execute("wget", "-O", zipPath, url)
+		err := Execute("wget", "-O", archieve, url)
 		if err != nil {
 			return err
 		}
@@ -158,13 +158,13 @@ func Install(r model.Release) error {
 	if err != nil {
 		return err
 	}
-	err = Uncompress(zipPath, path.Join(FvmHome, r.Version))
+	err = Uncompress(archieve, path.Join(FvmHome, r.Version))
 	if err != nil {
 		return err
 	}
 
 	term.Info("Removing " + fileName)
-	err = os.Remove(zipPath)
+	err = os.Remove(archieve)
 	if err != nil {
 		return err
 	}

@@ -7,6 +7,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/term"
 )
 
@@ -32,9 +33,9 @@ func SetAlias() error {
 }
 
 func setZshAlias() error {
-	aliasFile := path.Join(os.Getenv("HOME"), ".zshrc")
+	aliasFile := path.Join(os.Getenv("HOME"), consts.ZshRcName)
 	if Exists(aliasFile) {
-		term.Info("\nConfiguring \".zshrc\"...")
+		term.Info("\nConfiguring [%s]...", consts.ZshRcName)
 		f, err := os.OpenFile(aliasFile, os.O_APPEND|os.O_RDWR, 0600)
 		if err != nil {
 			return err
@@ -56,7 +57,7 @@ func setZshAlias() error {
 				}
 			}
 		}
-		term.Success("Configured \".zshrc\"")
+		term.Success("Configured [%s]", consts.ZshRcName)
 		return nil
 	}
 
@@ -65,9 +66,9 @@ func setZshAlias() error {
 
 func setBashAlias() error {
 	lines2Add := []string{"alias dart='fvm dart'", "alias flutter='fvm flutter'"}
-	aliasFile := path.Join(os.Getenv("HOME"), ".bashrc")
+	aliasFile := path.Join(os.Getenv("HOME"), consts.BashRcName)
 	if Exists(aliasFile) {
-		term.Info("\nConfiguring \".bashrc\"...")
+		term.Info("\nConfiguring [%s]...", consts.BashRcName)
 		f, err := os.OpenFile(aliasFile, os.O_APPEND|os.O_RDWR, 0600)
 		if err != nil {
 			return err
@@ -89,7 +90,7 @@ func setBashAlias() error {
 				}
 			}
 		}
-		term.Success("Configured \".bashrc\"")
+		term.Success("Configured [%s]", consts.BashRcName)
 		return nil
 	}
 
@@ -97,9 +98,9 @@ func setBashAlias() error {
 }
 
 func setFishAlias() error {
-	aliasFile := path.Join(os.Getenv("HOME"), ".config/fish/config.fish")
+	aliasFile := path.Join(os.Getenv("HOME"), consts.FishConfigPath)
 	if Exists(aliasFile) {
-		term.Info("\nConfiguring \"config.fish\"...")
+		term.Info("\nConfiguring [config.fish]...")
 		f, err := os.OpenFile(aliasFile, os.O_APPEND|os.O_RDWR, 0600)
 		if err != nil {
 			return err
@@ -121,7 +122,7 @@ func setFishAlias() error {
 				}
 			}
 		}
-		term.Success("Configured \"config.fish\"")
+		term.Success("Configured [config.fish]")
 		return nil
 	}
 

@@ -12,3 +12,7 @@ const (
 	}
 }`
 )
+
+const (
+	ConfigFileName = "config.json"
+)

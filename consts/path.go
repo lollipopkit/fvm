@@ -8,4 +8,8 @@ const (
 
 	IdeaDirName     = ".idea/"
 	IdeaSettingPath = IdeaDirName + "workspace.xml"
+
+	ZshRcName = ".zshrc"
+	BashRcName = ".bashrc"
+	FishConfigPath = ".config/fish/config.fish"
 )

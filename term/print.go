@@ -1,5 +1,7 @@
 package term
 
+import "fmt"
+
 const (
 	red     = "\033[91m"
 	green   = "\033[32m"
@@ -8,34 +10,34 @@ const (
 	noColor = "\033[0m"
 )
 
-func Error(s string, noPanic ...bool) {
-	if len(noPanic) > 0 && noPanic[0] {
-		print(red + s + noColor + "\n")
-	} else {
-		panic(s)
-	}
+func Error(s string, f ...any) {
+	print(fmt.Sprintf(red + s + noColor + "\n", f...))
 }
 
-func Success(s string) {
-	print(green + s + noColor + "\n")
+func ErrorNln(s string, f ...any) {
+	print(fmt.Sprintf(red + s + noColor, f...))
 }
 
-func SuccessNln(s string) {
-	print(green + s + noColor)
+func Success(s string, f ...any) {
+	print(fmt.Sprintf(green + s + noColor + "\n", f...))
 }
 
-func Warn(s string) {
-	print(yellow + s + noColor + "\n")
+func SuccessNln(s string, f ...any) {
+	print(fmt.Sprintf(green + s + noColor, f...))
 }
 
-func WarnNln(s string) {
-	print(yellow + s + noColor)
+func Warn(s string, f ...any) {
+	print(fmt.Sprintf(yellow + s + noColor + "\n", f...))
 }
 
-func Info(s string) {
-	print(cyan + s + noColor + "\n")
+func WarnNln(s string, f ...any) {
+	print(fmt.Sprintf(yellow + s + noColor, f...))
 }
 
-func InfoNln(s string) {
-	print(cyan + s + noColor)
+func Info(s string, f ...any) {
+	print(fmt.Sprintf(cyan + s + noColor + "\n", f...))
+}
+
+func InfoNln(s string, f ...any) {
+	print(fmt.Sprintf(cyan + s + noColor, f...))
 }

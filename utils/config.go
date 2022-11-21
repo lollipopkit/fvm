@@ -6,12 +6,14 @@ import (
 	"io/ioutil"
 	"path"
 
+	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/model"
 )
 
 var (
 	Config      model.Config
 	ErrNoConfig = errors.New("No config file")
+	configPath  = path.Join(FvmHome, consts.ConfigFileName)
 )
 
 func init() {
@@ -19,7 +21,6 @@ func init() {
 }
 
 func GetConfig() error {
-	configPath := path.Join(FvmHome, "config.json")
 	if Exists(configPath) {
 		data, err := ioutil.ReadFile(configPath)
 		if err == nil {
@@ -31,7 +32,6 @@ func GetConfig() error {
 }
 
 func SaveConfig() error {
-	configPath := path.Join(FvmHome, "config.json")
 	data, err := json.Marshal(Config)
 	if err == nil {
 		err = ioutil.WriteFile(configPath, data, 0644)

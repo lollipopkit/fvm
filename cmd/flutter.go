@@ -30,7 +30,7 @@ func handleFlutter(ctx *cli.Context) error {
 	if utils.Exists(wdFvm) {
 		err = utils.Execute(path.Join(wdFvm, "bin/flutter"), args...)
 	} else {
-		err = utils.Execute("dart", args...)
+		err = utils.Execute("flutter", args...)
 	}
 	return err
 }
