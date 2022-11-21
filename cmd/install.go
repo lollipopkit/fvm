@@ -38,7 +38,6 @@ func handleInstall(ctx *cli.Context) error {
 		return nil
 	}
 
-	term.Info("Installing version [" + version + "]...")
 	r, err := utils.GetReleaseByVersion(releases, version)
 	if err != nil {
 		return err

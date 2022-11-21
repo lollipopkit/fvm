@@ -18,18 +18,17 @@ var (
 )
 
 func SetAlias() error {
-	shell := os.Getenv("SHELL")
-	shell = path.Base(shell)
+	shell := GetShell()
 
 	switch shell {
-	case "zsh":
+	case ShellTypeZsh:
 		return setZshAlias()
-	case "bash":
+	case ShellTypeBash:
 		return setBashAlias()
-	case "fish":
+	case ShellTypeFish:
 		return setFishAlias()
 	}
-	return fmt.Errorf(ErrUnsupportedShellPrefix + shell)
+	return fmt.Errorf(ErrUnsupportedShellPrefix + shell.String())
 }
 
 func setZshAlias() error {

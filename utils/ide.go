@@ -47,13 +47,16 @@ func vscode() error {
 				return err
 			}
 		}
-		return ioutil.WriteFile(consts.VscodeSettingPath, bytes, 0644)
+		if err = ioutil.WriteFile(consts.VscodeSettingPath, bytes, 0644); err != nil {
+			return err
+		}
+		term.Success("Configured VSCode.")
 	}
 	return nil
 }
 
 func idea() error {
-	term.Warn("IDEA is not supported yet")
+	term.Warn("IDEA is not supported yet.")
 	return nil
 }
 

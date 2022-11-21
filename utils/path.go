@@ -15,29 +15,24 @@ var (
 )
 
 func ConfigPath() error {
-	term.Info("\nConfiguring PATH...")
-	shell := os.Getenv("SHELL")
-	if shell == "" {
-		return fmt.Errorf("Can not get SHELL env")
-	}
-	shell = path.Base(shell)
+	shell := GetShell()
 
 	shellConfigFile := ""
 	switch shell {
-	case "bash":
+	case ShellTypeBash:
 		shellConfigFile = path.Join(os.Getenv("HOME"), ".bashrc")
-	case "zsh":
+	case ShellTypeZsh:
 		shellConfigFile = path.Join(os.Getenv("HOME"), ".zshrc")
-	case "fish":
+	case ShellTypeFish:
 		shellConfigFile = path.Join(os.Getenv("HOME"), ".config", "fish", "config.fish")
 	default:
-		return fmt.Errorf(ErrUnsupportedShellPrefix+"%s", shell)
+		return fmt.Errorf(ErrUnsupportedShellPrefix+"%s", shell.String())
 	}
 
 	switch shell {
-	case "bash", "zsh":
+	case ShellTypeZsh, ShellTypeBash:
 		return configPath4Bash(shellConfigFile)
-	case "fish":
+	case ShellTypeFish:
 		return configPath4Fish(shellConfigFile)
 	default:
 		return fmt.Errorf(ErrUnsupportedShellPrefix+"%s", shell)

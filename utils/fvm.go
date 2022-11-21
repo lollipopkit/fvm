@@ -181,7 +181,6 @@ func Global(version string) error {
 	}
 
 	dst := path.Join(FvmHome, "global")
-	term.Info("Using Flutter " + version)
 
 	err := Symlink(installPath, dst)
 	if err != nil {
@@ -208,6 +207,7 @@ func Global(version string) error {
 			term.Info("Please add the following line to your shell config file:\n\nexport PATH=$PATH:" + path.Join(FvmHome, "global", "bin"))
 		}
 	}
+	term.Success("Global version -> " + version)
 
 	return nil
 }
@@ -224,7 +224,6 @@ func Use(v string) error {
 	}
 
 	dst := path.Join(wd, consts.FVM_DIR_NAME)
-	term.Info("Using Flutter " + v)
 
 	if Exists(dst) {
 		err = os.RemoveAll(dst)
@@ -244,7 +243,14 @@ func Use(v string) error {
 		return err
 	}
 
-	return ConfigGitIgnore()
+	println()
+	if err = ConfigGitIgnore(); err != nil {
+		return err
+	}
+	println()
+
+	term.Success("Project Flutter -> " + v)
+	return nil
 }
 
 func Test() error {
