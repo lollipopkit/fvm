@@ -2,7 +2,7 @@
 <p align="center">Flutter SDK Version Manager written in Go.</p>
 
 <p align="center">
-    <img alt="badge-lang" src="https://badgen.net/badge/FVM/0.0.6/cyan">
+    <img alt="badge-lang" src="https://badgen.net/badge/FVM/0.0.7/cyan">
     <img alt="badge-lang" src="https://badgen.net/badge/Go/1.19/purple">
 </p>
 
@@ -14,6 +14,7 @@ English | [简体中文](README_CN.md)
 - [x] Project Versioning
 - [x] **Portable** - No need to install Flutter SDK to install fvm
 - [x] Auto config PATH and IDE settings
+- [x] Alias. e.g. `fvm dart format .` or `dart format .`
 
 
 ### 💾 Installation
