@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -9,11 +10,12 @@ import (
 )
 
 var (
-	lines2Add = []string{"alias dart='fvm dart'", "alias flutter='fvm flutter'"}
+	aliasLines2Add = []string{"alias dart='fvm dart'", "alias flutter='fvm flutter'"}
+	ErrUnsupportedShell = errors.New("Unsupported shell: " + ShellName)
 )
 
 type aliasConfiger interface {
-	SetAlias() error
+	SetAlias() (error)
 }
 
 type zshAliasConfiger struct{}
@@ -34,7 +36,7 @@ func (zshAliasConfiger) SetAlias() error {
 
 		lines := strings.Split(string(data), "\n")
 
-		for _, line2Add := range lines2Add {
+		for _, line2Add := range aliasLines2Add {
 			if !Contains(lines, line2Add) {
 				if _, err = f.WriteString("\n" + line2Add); err != nil {
 					return err
@@ -66,7 +68,7 @@ func (bashAliasConfiger) SetAlias() error {
 
 		lines := strings.Split(string(data), "\n")
 
-		for _, line2Add := range lines2Add {
+		for _, line2Add := range aliasLines2Add {
 			if !Contains(lines, line2Add) {
 				if _, err = f.WriteString("\n" + line2Add); err != nil {
 					return err
@@ -98,7 +100,7 @@ func (fishAliasConfiger) SetAlias() error {
 
 		lines := strings.Split(string(data), "\n")
 
-		for _, line2Add := range lines2Add {
+		for _, line2Add := range aliasLines2Add {
 			if !Contains(lines, line2Add) {
 				if _, err = f.WriteString("\n" + line2Add); err != nil {
 					return err
@@ -124,5 +126,13 @@ func SetAlias() error {
 	default:
 		return ErrUnsupportedShell
 	}
-	return c.SetAlias()
+
+	err := c.SetAlias()
+	if err != nil {
+		return err
+	}
+
+	term.Warn("\nPlease run following command to reload shell config file:")
+	println("source " + RcPath)
+	return nil
 }

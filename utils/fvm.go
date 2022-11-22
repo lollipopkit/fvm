@@ -26,6 +26,12 @@ var (
 	}
 )
 
+func init() {
+	if err := TestFvm(); err != nil {
+		term.Warn("FVM is not in PATH, please add it to PATH.")
+	}
+}
+
 func JudgeUseMirror(notify bool) bool {
 	if Config.UseMirror == nil {
 		china := false
@@ -186,28 +192,7 @@ func Global(version string) error {
 		return err
 	}
 
-	err = Test()
-	if err != nil {
-		term.Warn("\nIt seems like that you have to config PATH.")
-		unsupport := false
-		confirm := term.Confirm("Do you want to automatically config PATH?", true)
-		if confirm {
-			err = ConfigPath()
-			if err != nil {
-				if err == ErrUnsupportedShell {
-					unsupport = true
-					term.Warn("Sorry, your shell is not supported.")
-				} else {
-					return err
-				}
-			}
-		}
-		if unsupport || !confirm {
-			term.Info("Please add the following line to your shell config file:\n\nexport PATH=$PATH:" + path.Join(FvmHome, "global", "bin"))
-		}
-	}
 	term.Success("Global version -> " + version)
-
 	return nil
 }
 
@@ -252,8 +237,8 @@ func Use(v string) error {
 	return nil
 }
 
-func Test() error {
-	cmd := exec.Command("flutter")
+func TestFvm() error {
+	cmd := exec.Command("fvm")
 	return cmd.Run()
 }
 
