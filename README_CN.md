@@ -18,12 +18,14 @@
 
 
 ### 💾 使用
-1. 安装 `fvm`。一键安装（需要Go环境）： `go install github.com/lollipopkit/fvm@latest`，或者，从 [这里](https://github.com/lollipopkit/fvm/releases) 下载最新二进制文件。 强烈推荐将 `fvm` 添加到环境变量中。
-2. 强烈建议设置环境 `FVM_HOME`。 如果你没有设置环境 `FVM_HOME`, fvm 会使用默认的路径 `$HOME/.fvm` 。
+1. 安装 `fvm`。
+   - 一键安装（需要Go环境）： `go install github.com/lollipopkit/fvm@latest`
+   - 从 [这里](https://github.com/lollipopkit/fvm/releases) 下载最新二进制文件。 记得将 `fvm` 添加到环境变量中。
+2. 强烈建议设置环境 `FVM_HOME`。 如果你没有设置环境 `FVM_HOME`，fvm 会使用默认的路径 `$HOME/.fvm` 。
 3. 运行 `fvm install <version>` 来安装某个版本的SDK。
 4. 通过 `fvm global <version>` 来设定全局默认版本。
 5. 进入项目文件夹, 运行 `fvm use <version>` 来设定项目特定版本（仅在该文件夹生效）。
-6. 通过 `fvm config alias` 来设置别名。 这样，你可以省略 `fvm` 命令前缀。 例如：使用 `dart format .` 而不是 `fvm dart format .`。
+6. 通过 `fvm config alias` 来设置别名。 这样，你可以省略 `fvm` 命令前缀。 例如：格式化项目，使用 `dart format .` 而不是 `fvm dart format .` 命令。
 
 ### 🔖 注意
 - 这个工具与 `fvm-dart` 部分兼容, 但存在许多差异。 你可能需要根据上述步骤重新配置环境。

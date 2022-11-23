@@ -18,7 +18,9 @@ English | [简体中文](README_CN.md)
 
 
 ### 💾 Uasge
-1. Install `fvm` through `go install github.com/lollipopkit/fvm@latest` or download the latest release from [HERE](https://github.com/lollipopkit/fvm/releases). It's highly recommended to add `fvm` to PATH.
+1. Install `fvm` through:
+   - `go install github.com/lollipopkit/fvm@latest` (require Golang installed).
+   - Download the latest release from [HERE](https://github.com/lollipopkit/fvm/releases). Remember to add `fvm` to PATH.
 2. It's highly recommended to set env `FVM_HOME`. If you don't set `FVM_HOME`, fvm will use`$HOME/.fvm` as default.
 3. Run `fvm install <version>` to install flutter sdk.
 4. Set default global version by `fvm global <version>`.
