@@ -3,7 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"errors"
-	"io/ioutil"
+	"os"
 	"path"
 
 	"github.com/lollipopkit/fvm/consts"
@@ -23,7 +23,7 @@ func init() {
 
 func GetConfig() error {
 	if Exists(configPath) {
-		data, err := ioutil.ReadFile(configPath)
+		data, err := os.ReadFile(configPath)
 		if err == nil {
 			err = json.Unmarshal(data, &Config)
 		}
@@ -35,7 +35,7 @@ func GetConfig() error {
 func SaveConfig() error {
 	data, err := json.Marshal(Config)
 	if err == nil {
-		err = ioutil.WriteFile(configPath, data, 0644)
+		err = os.WriteFile(configPath, data, 0644)
 	}
 	return err
 }

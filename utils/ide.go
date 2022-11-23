@@ -3,7 +3,6 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	"github.com/lollipopkit/fvm/consts"
@@ -14,7 +13,7 @@ import (
 func vscode() error {
 	var now gjson.Result
 	if Exists(consts.VscodeSettingPath) {
-		data, err := ioutil.ReadFile(consts.VscodeSettingPath)
+		data, err := os.ReadFile(consts.VscodeSettingPath)
 		if err != nil {
 			return err
 		}
@@ -39,7 +38,7 @@ func vscode() error {
 	println()
 	print(string(bytes))
 
-	write := term.Confirm(fmt.Sprintf("\nWrite above content into \"%s\"?", consts.VscodeSettingPath), true)
+	write := term.Confirm(fmt.Sprintf("\nWrite above content into %s?", consts.VscodeSettingPath), true)
 	if write {
 		if !Exists(consts.VscodeDirName) {
 			err = os.Mkdir(consts.VscodeDirName, 0755)
@@ -47,7 +46,7 @@ func vscode() error {
 				return err
 			}
 		}
-		if err = ioutil.WriteFile(consts.VscodeSettingPath, bytes, 0644); err != nil {
+		if err = os.WriteFile(consts.VscodeSettingPath, bytes, 0644); err != nil {
 			return err
 		}
 		term.Success("Configured VSCode.")

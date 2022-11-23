@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"io/ioutil"
+	"os"
 
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/term"
@@ -20,7 +20,7 @@ func init() {
 }
 
 func handleList(ctx *cli.Context) error {
-	dirs, err := ioutil.ReadDir(utils.FvmHome)
+	dirs, err := os.ReadDir(utils.FvmHome)
 	if err != nil {
 		return err
 	}

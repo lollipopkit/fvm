@@ -185,3 +185,28 @@ func GetFileHash(path string) (string, error) {
 
 	return fmt.Sprintf("%x", h.Sum(nil)), nil
 }
+
+func AppendIfNotContains(path string, lines2Add []string) error {
+	f, err := os.OpenFile(path, os.O_APPEND|os.O_RDWR, 0600)
+	if err != nil {
+		return err
+	}
+
+	defer f.Close()
+
+	data, err := io.ReadAll(f)
+	if err != nil {
+		return err
+	}
+
+	lines := strings.Split(string(data), "\n")
+
+	for _, line2Add := range lines2Add {
+		if !Contains(lines, line2Add) {
+			if _, err = f.WriteString("\n" + line2Add); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}

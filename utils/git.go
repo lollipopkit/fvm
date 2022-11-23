@@ -1,11 +1,10 @@
 package utils
 
 import (
-	"io/ioutil"
 	"os"
 	"path"
-	"strings"
 
+	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/term"
 )
 
@@ -17,29 +16,14 @@ func ConfigGitIgnore() error {
 
 	gitIgnoreFile := path.Join(wd, ".gitignore")
 	if Exists(gitIgnoreFile) {
-		f, err := os.OpenFile(gitIgnoreFile, os.O_APPEND|os.O_RDWR, 0600)
+		err := AppendIfNotContains(gitIgnoreFile, []string{consts.FvmDirName})
 		if err != nil {
 			return err
 		}
-
-		defer f.Close()
-
-		lines, err := ioutil.ReadAll(f)
-		if err != nil {
-			return err
-		}
-
-		line2Add := ".fvm"
-		if !Contains(strings.Split(string(lines), "\n"), line2Add) {
-			if _, err = f.WriteString("\n" + line2Add); err != nil {
-				return err
-			}
-		} else {
-			term.Success(".gitignore already configured. Skip.")
-			return nil
-		}
+		term.Success(".gitignore already configured. Skip.")
+		return nil
 	} else {
-		if err := ioutil.WriteFile(gitIgnoreFile, []byte(".fvm"), 0644); err != nil {
+		if err := os.WriteFile(gitIgnoreFile, []byte(consts.FvmDirName), 0644); err != nil {
 			return err
 		}
 	}
