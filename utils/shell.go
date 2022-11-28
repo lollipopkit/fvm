@@ -9,12 +9,20 @@ import (
 )
 
 var (
-	Shell     = GetShell()
-	RcPath    = Shell.RcPath()
-	ShellName = Shell.String()
+	Shell     ShellType
+	RcPath    string
+	ShellName string
 
 	ErrShellConfigNotFound = errors.New("Shell config file not found: " + RcPath)
 )
+
+func init() {
+	go func() {
+		Shell = GetShell()
+		RcPath = Shell.RcPath()
+		ShellName = Shell.String()
+	}()
+}
 
 type ShellType uint8
 

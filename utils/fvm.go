@@ -26,12 +26,6 @@ var (
 	}
 )
 
-func init() {
-	if err := TestFvm(); err != nil {
-		term.Warn("FVM is not in PATH, please add it to PATH.")
-	}
-}
-
 func JudgeUseMirror(notify bool) bool {
 	if Config.UseMirror == nil {
 		china := false
