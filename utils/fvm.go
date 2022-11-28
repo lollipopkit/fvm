@@ -151,9 +151,18 @@ func Install(r model.Release) error {
 			return err
 		}
 	}
+	
+	term.Info("Checking SHA256...")
+	hash, err := GetFileHash(archieve)
+	if err != nil {
+		return err
+	}
+	if hash != r.Sha256 {
+		return fmt.Errorf("SHA256 not match, expect %s, got %s", r.Sha256, hash)
+	}
 
 	term.Info("Uncompressing " + fileName)
-	err := os.Mkdir(path.Join(FvmHome, r.Version), 0755)
+	err = os.Mkdir(path.Join(FvmHome, r.Version), 0755)
 	if err != nil {
 		return err
 	}
