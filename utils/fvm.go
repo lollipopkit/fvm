@@ -151,7 +151,7 @@ func Install(r model.Release) error {
 			return err
 		}
 	}
-	
+
 	term.Info("Checking SHA256...")
 	hash, err := GetFileHash(archieve)
 	if err != nil {

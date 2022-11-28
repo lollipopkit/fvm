@@ -7,12 +7,12 @@ import (
 )
 
 var (
-	aliasLines2Add = []string{"alias dart='fvm dart'", "alias flutter='fvm flutter'"}
+	aliasLines2Add      = []string{"alias dart='fvm dart'", "alias flutter='fvm flutter'"}
 	ErrUnsupportedShell = errors.New("Unsupported shell: " + ShellName)
 )
 
 type aliasConfiger interface {
-	SetAlias() (error)
+	SetAlias() error
 }
 
 type fishAliasConfiger struct{}

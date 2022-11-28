@@ -17,6 +17,7 @@ func Run() {
 	app := &cli.App{
 		Name:     consts.APP_NAME,
 		Usage:    "Flutter Version Manager written in Go",
+		Version:  consts.APP_VERSION,
 		Commands: cmds,
 		Flags:    flags,
 		Action: func(ctx *cli.Context) error {

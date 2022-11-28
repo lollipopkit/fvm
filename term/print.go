@@ -11,33 +11,33 @@ const (
 )
 
 func Error(s string, f ...any) {
-	print(fmt.Sprintf(red + s + noColor + "\n", f...))
+	print(fmt.Sprintf(red+s+noColor+"\n", f...))
 }
 
 func ErrorNln(s string, f ...any) {
-	print(fmt.Sprintf(red + s + noColor, f...))
+	print(fmt.Sprintf(red+s+noColor, f...))
 }
 
 func Success(s string, f ...any) {
-	print(fmt.Sprintf(green + s + noColor + "\n", f...))
+	print(fmt.Sprintf(green+s+noColor+"\n", f...))
 }
 
 func SuccessNln(s string, f ...any) {
-	print(fmt.Sprintf(green + s + noColor, f...))
+	print(fmt.Sprintf(green+s+noColor, f...))
 }
 
 func Warn(s string, f ...any) {
-	print(fmt.Sprintf(yellow + s + noColor + "\n", f...))
+	print(fmt.Sprintf(yellow+s+noColor+"\n", f...))
 }
 
 func WarnNln(s string, f ...any) {
-	print(fmt.Sprintf(yellow + s + noColor, f...))
+	print(fmt.Sprintf(yellow+s+noColor, f...))
 }
 
 func Info(s string, f ...any) {
-	print(fmt.Sprintf(cyan + s + noColor + "\n", f...))
+	print(fmt.Sprintf(cyan+s+noColor+"\n", f...))
 }
 
 func InfoNln(s string, f ...any) {
-	print(fmt.Sprintf(cyan + s + noColor, f...))
+	print(fmt.Sprintf(cyan+s+noColor, f...))
 }
