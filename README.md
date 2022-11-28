@@ -2,7 +2,7 @@
 <p align="center">Flutter SDK Version Manager written in Go.</p>
 
 <p align="center">
-    <img alt="badge-lang" src="https://badgen.net/badge/FVM/0.0.8/cyan">
+    <img alt="badge-lang" src="https://badgen.net/badge/FVM/0.1.0/cyan">
     <img alt="badge-lang" src="https://badgen.net/badge/Go/1.19/purple">
 </p>
 
@@ -57,5 +57,5 @@ GLOBAL OPTIONS:
 
 ### 📝 License
 ```
-lollipopkit LPGL-3.0
+lollipopkit LGPL-3.0
 ```
