@@ -15,6 +15,7 @@ func init() {
 		Aliases: []string{"f"},
 		Usage:   "Proxy flutter commands",
 		Action:  handleFlutter,
+		SkipFlagParsing: true,
 	})
 }
 

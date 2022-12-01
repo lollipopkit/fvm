@@ -15,6 +15,7 @@ func init() {
 		Aliases: []string{"d"},
 		Usage:   "Proxy dart commands",
 		Action:  handleDart,
+		SkipFlagParsing: true,
 	})
 }
 
