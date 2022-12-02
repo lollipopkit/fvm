@@ -23,19 +23,17 @@ var (
 )
 
 func init() {
-	go func() {
-		if FvmHome == "" {
-			FvmHome = consts.HOME + "/.fvm"
-			term.Warn("FVM_HOME is not set, using default path: " + FvmHome)
+	if FvmHome == "" {
+		FvmHome = consts.HOME + "/.fvm"
+		term.Warn("FVM_HOME is not set, using default path: " + FvmHome)
+	}
+	if !Exists(FvmHome) {
+		err := os.MkdirAll(FvmHome, 0755)
+		if err != nil {
+			term.Error("Failed to create FVM_HOME: " + FvmHome)
+			os.Exit(1)
 		}
-		if !Exists(FvmHome) {
-			err := os.MkdirAll(FvmHome, 0755)
-			if err != nil {
-				term.Error("Failed to create FVM_HOME: " + FvmHome)
-				os.Exit(1)
-			}
-		}
-	}()
+	}
 }
 
 func Contains[T string | int | int64 | float64](list []T, item T) bool {

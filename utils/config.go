@@ -17,10 +17,8 @@ var (
 )
 
 func init() {
-	go func() {
-		configPath = path.Join(FvmHome, consts.ConfigFileName)
-		GetConfig()
-	}()
+	configPath = path.Join(FvmHome, consts.ConfigFileName)
+	GetConfig()
 }
 
 func GetConfig() error {
