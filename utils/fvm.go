@@ -195,6 +195,22 @@ func Global(version string) error {
 		return err
 	}
 
+	err = TestFlutter()
+	if err != nil {
+		term.Warn("It seems like that you have to config PATH.\n")
+		confirm := term.Confirm("Do you want to automatically config PATH?", true)
+		if confirm {
+			err = ConfigPath()
+			if err != nil {
+				return err
+			}
+		}
+		if !confirm {
+			term.Warn("\nPlease add the following line to your shell config file:")
+			println("export PATH=$PATH:" + path.Join(FvmHome, "global", "bin") + "\n")
+		}
+	}
+
 	term.Success("Global version -> " + version)
 	return nil
 }
@@ -242,6 +258,11 @@ func Use(v string) error {
 
 func TestFvm() error {
 	cmd := exec.Command("fvm")
+	return cmd.Run()
+}
+
+func TestFlutter() error {
+	cmd := exec.Command("flutter")
 	return cmd.Run()
 }
 

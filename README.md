@@ -2,7 +2,7 @@
 <p align="center">Flutter SDK Version Manager written in Go.</p>
 
 <p align="center">
-    <img alt="badge-lang" src="https://badgen.net/badge/FVM/0.1.0/cyan">
+    <img alt="badge-lang" src="https://badgen.net/badge/FVM/0.1.1/cyan">
     <img alt="badge-lang" src="https://badgen.net/badge/Go/1.19/purple">
 </p>
 
@@ -25,7 +25,7 @@ English | [简体中文](README_CN.md)
 3. Run `fvm install <version>` to install flutter sdk.
 4. Set default global version by `fvm global <version>`.
 5. Enter project folder, run `fvm use <version>` to use flutter sdk only in this directory.
-6. Config alias by `fvm config alias`. So, you can omit `fvm` and use `dart` or `flutter` directly. eg. `dart format .` instead of `fvm dart format .`.
+6. (Optional) Config alias by `fvm config alias`. So, you can omit `fvm` and use `dart` or `flutter` in your terminal directly. eg. `dart format .` instead of `fvm dart format .`.
 
 
 ### 🔖 Attention

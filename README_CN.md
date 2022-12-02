@@ -2,7 +2,7 @@
 <p align="center">Flutter SDK 版本管理工具 - Golang实现</p>
 
 <p align="center">
-    <img alt="badge-lang" src="https://badgen.net/badge/FVM/0.1.0/cyan">
+    <img alt="badge-lang" src="https://badgen.net/badge/FVM/0.1.1/cyan">
     <img alt="badge-lang" src="https://badgen.net/badge/Go/1.19/purple">
 </p>
 
@@ -25,7 +25,7 @@
 3. 运行 `fvm install <version>` 来安装某个版本的SDK。
 4. 通过 `fvm global <version>` 来设定全局默认版本。
 5. 进入项目文件夹, 运行 `fvm use <version>` 来设定项目特定版本（仅在该文件夹生效）。
-6. 通过 `fvm config alias` 来设置别名。 这样，你可以省略 `fvm` 命令前缀。 例如：格式化项目，使用 `dart format .` 而不是 `fvm dart format .` 命令。
+6. (可选) 通过 `fvm config alias` 来设置别名。 这样，你可以在终端内省略 `fvm` 命令前缀。 例如：格式化项目，使用 `dart format .` 而不是 `fvm dart format .` 命令。
 
 ### 🔖 注意
 - 这个工具与 `fvm-dart` 部分兼容, 但存在许多差异。 你可能需要根据上述步骤重新配置环境。
