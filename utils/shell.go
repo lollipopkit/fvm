@@ -13,7 +13,8 @@ var (
 	RcPath    string
 	ShellName string
 
-	ErrShellConfigNotFound = errors.New("Shell config file not found: " + RcPath)
+	ErrShellConfigNotFound = errNone
+	ErrUnsupportedShell    = errNone
 )
 
 func init() {
@@ -21,6 +22,8 @@ func init() {
 		Shell = GetShell()
 		RcPath = Shell.RcPath()
 		ShellName = Shell.String()
+		ErrShellConfigNotFound = errors.New("Shell config file not found: " + RcPath)
+		ErrUnsupportedShell = errors.New("Unsupported shell: " + ShellName)
 	}()
 }
 

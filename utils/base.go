@@ -3,6 +3,7 @@ package utils
 import (
 	"archive/zip"
 	"crypto/sha256"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -18,6 +19,7 @@ import (
 var (
 	ErrUnsuppotedCompressFormat = fmt.Errorf("unsupported compress format")
 	FvmHome                     = os.Getenv(consts.FVM_HOME)
+	errNone                     = errors.New("")
 )
 
 func init() {

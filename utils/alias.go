@@ -1,14 +1,11 @@
 package utils
 
 import (
-	"errors"
-
 	"github.com/lollipopkit/fvm/term"
 )
 
 var (
-	aliasLines2Add      = []string{"alias dart='fvm dart'", "alias flutter='fvm flutter'"}
-	ErrUnsupportedShell = errors.New("Unsupported shell: " + ShellName)
+	aliasLines2Add = []string{"alias dart='fvm dart'", "alias flutter='fvm flutter'"}
 )
 
 type aliasConfiger interface {
