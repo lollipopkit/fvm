@@ -2,7 +2,7 @@
 <p align="center">Flutter SDK 版本管理工具 - Golang实现</p>
 
 <p align="center">
-    <img alt="badge-lang" src="https://badgen.net/badge/FVM/0.1.1/cyan">
+    <img alt="badge-lang" src="https://badgen.net/badge/FVM/0.2.0/cyan">
     <img alt="badge-lang" src="https://badgen.net/badge/Go/1.19/purple">
 </p>
 
