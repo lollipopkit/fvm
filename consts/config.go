@@ -1,16 +1,10 @@
 package consts
 
-const (
-	VSC_CONFIG = `
-{
-	"dart.flutterSdkPath": ".fvm",
-	"search.exclude": {
-	  "**/.fvm": true
-	},
-	"files.watcherExclude": {
-	  "**/.fvm": true
-	}
-}`
+import _ "embed"
+
+var (
+	//go:embed settings.json
+	VSC_CONFIG string
 )
 
 const (
