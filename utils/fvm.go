@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/lollipopkit/fvm/consts"
@@ -121,7 +121,7 @@ func Install(r model.Release) error {
 		}
 	}
 
-	archieve := path.Join(FvmHome, fileName)
+	archieve := filepath.Join(FvmHome, fileName)
 
 	download := true
 	if Exists(archieve) {
@@ -162,11 +162,11 @@ func Install(r model.Release) error {
 	}
 
 	term.Info("Uncompressing " + fileName)
-	err = os.Mkdir(path.Join(FvmHome, r.Version), 0755)
+	err = os.Mkdir(filepath.Join(FvmHome, r.Version), 0755)
 	if err != nil {
 		return err
 	}
-	err = Uncompress(archieve, path.Join(FvmHome, r.Version))
+	err = Uncompress(archieve, filepath.Join(FvmHome, r.Version))
 	if err != nil {
 		return err
 	}
@@ -183,12 +183,12 @@ func Install(r model.Release) error {
 }
 
 func Global(version string) error {
-	installPath := path.Join(FvmHome, version, "flutter")
+	installPath := filepath.Join(FvmHome, version, "flutter")
 	if !Exists(installPath) {
 		return ErrVersionNotInstalled
 	}
 
-	dst := path.Join(FvmHome, "global")
+	dst := filepath.Join(FvmHome, "global")
 
 	err := Symlink(installPath, dst)
 	if err != nil {
@@ -207,7 +207,7 @@ func Global(version string) error {
 		}
 		if !confirm {
 			term.Warn("\nPlease add the following line to your shell config file:")
-			println("export PATH=$PATH:" + path.Join(FvmHome, "global", "bin") + "\n")
+			println("export PATH=$PATH:" + filepath.Join(FvmHome, "global", "bin") + "\n")
 		}
 	}
 
@@ -216,7 +216,7 @@ func Global(version string) error {
 }
 
 func Use(v string) error {
-	installPath := path.Join(FvmHome, v, "flutter")
+	installPath := filepath.Join(FvmHome, v, "flutter")
 	if !Exists(installPath) {
 		return ErrVersionNotInstalled
 	}
@@ -226,7 +226,7 @@ func Use(v string) error {
 		return err
 	}
 
-	dst := path.Join(wd, consts.FvmDirName)
+	dst := filepath.Join(wd, consts.FvmDirName)
 
 	if Exists(dst) {
 		err = os.RemoveAll(dst)
@@ -267,6 +267,6 @@ func TestFlutter() error {
 }
 
 func IsVersionInstalled(version string) bool {
-	installPath := path.Join(FvmHome, version, "flutter")
+	installPath := filepath.Join(FvmHome, version, "flutter")
 	return Exists(installPath)
 }

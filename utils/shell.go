@@ -3,7 +3,7 @@ package utils
 import (
 	"errors"
 	"os"
-	"path"
+	"path/filepath"
 
 	"github.com/lollipopkit/fvm/consts"
 )
@@ -42,7 +42,7 @@ func GetShell() ShellType {
 		return ShellTypeUnknown
 	}
 
-	shell = path.Base(shell)
+	shell = filepath.Base(shell)
 	switch shell {
 	case "zsh":
 		return ShellTypeZsh
@@ -71,11 +71,11 @@ func (s ShellType) String() string {
 func (s ShellType) RcPath() string {
 	switch s {
 	case ShellTypeZsh:
-		return path.Join(consts.HOME, consts.ZshRcName)
+		return filepath.Join(consts.HOME, consts.ZshRcName)
 	case ShellTypeBash:
-		return path.Join(consts.HOME, consts.BashRcName)
+		return filepath.Join(consts.HOME, consts.BashRcName)
 	case ShellTypeFish:
-		return path.Join(consts.HOME, consts.FishConfigPath)
+		return filepath.Join(consts.HOME, consts.FishConfigPath)
 	default:
 		return ""
 	}

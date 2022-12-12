@@ -3,7 +3,7 @@ package utils
 import (
 	"io/ioutil"
 	"os"
-	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/lollipopkit/fvm/term"
@@ -30,7 +30,7 @@ func configPath4Bash() error {
 		return err
 	}
 
-	line2Add := "export PATH=$PATH:" + path.Join(FvmHome, "global", "bin")
+	line2Add := "export PATH=$PATH:" + filepath.Join(FvmHome, "global", "bin")
 	lines := strings.Split(string(content), "\n")
 	if Contains(lines, line2Add) {
 		term.Info("\nPATH already configured. Skip.")
@@ -61,7 +61,7 @@ func configPath4Fish() error {
 		return err
 	}
 
-	line2Add := "set PATH " + path.Join(FvmHome, "global", "bin") + "$PATH"
+	line2Add := "set PATH " + filepath.Join(FvmHome, "global", "bin") + "$PATH"
 	lines := strings.Split(string(content), "\n")
 	if Contains(lines, line2Add) {
 		term.Info("\nPATH already configured. Skip.")

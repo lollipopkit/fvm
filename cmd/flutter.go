@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"os"
-	"path"
+	"path/filepath"
 
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/utils"
@@ -11,10 +11,10 @@ import (
 
 func init() {
 	cmds = append(cmds, &cli.Command{
-		Name:    "flutter",
-		Aliases: []string{"f"},
-		Usage:   "Proxy flutter commands",
-		Action:  handleFlutter,
+		Name:            "flutter",
+		Aliases:         []string{"f"},
+		Usage:           "Proxy flutter commands",
+		Action:          handleFlutter,
 		SkipFlagParsing: true,
 	})
 }
@@ -27,9 +27,9 @@ func handleFlutter(ctx *cli.Context) error {
 		return err
 	}
 
-	wdFvm := path.Join(pwd, consts.FvmDirName)
+	wdFvm := filepath.Join(pwd, consts.FvmDirName)
 	if utils.Exists(wdFvm) {
-		err = utils.Execute(path.Join(wdFvm, "bin/flutter"), args...)
+		err = utils.Execute(filepath.Join(wdFvm, "bin/flutter"), args...)
 	} else {
 		err = utils.Execute("flutter", args...)
 	}

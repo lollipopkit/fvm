@@ -8,7 +8,6 @@ import (
 	"io"
 	"os"
 	"os/exec"
-	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -25,7 +24,7 @@ var (
 
 func init() {
 	if FvmHome == "" {
-		FvmHome = path.Join(consts.HOME, ".fvm")
+		FvmHome = filepath.Join(consts.HOME, ".fvm")
 		term.Warn("FVM_HOME is not set, using default path: " + FvmHome)
 	}
 	if !Exists(FvmHome) {

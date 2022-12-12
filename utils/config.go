@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
-	"path"
+	"path/filepath"
 
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/model"
@@ -17,7 +17,7 @@ var (
 )
 
 func init() {
-	configPath = path.Join(FvmHome, consts.ConfigFileName)
+	configPath = filepath.Join(FvmHome, consts.ConfigFileName)
 	GetConfig()
 }
 

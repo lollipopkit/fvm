@@ -2,7 +2,7 @@ package utils
 
 import (
 	"os"
-	"path"
+	"path/filepath"
 
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/term"
@@ -14,7 +14,7 @@ func ConfigGitIgnore() error {
 		return err
 	}
 
-	gitIgnoreFile := path.Join(wd, ".gitignore")
+	gitIgnoreFile := filepath.Join(wd, ".gitignore")
 	if Exists(gitIgnoreFile) {
 		err := AppendIfNotContains(gitIgnoreFile, []string{consts.FvmDirName})
 		if err != nil {
