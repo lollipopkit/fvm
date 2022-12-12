@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -24,7 +25,7 @@ var (
 
 func init() {
 	if FvmHome == "" {
-		FvmHome = consts.HOME + "/.fvm"
+		FvmHome = path.Join(consts.HOME, ".fvm")
 		term.Warn("FVM_HOME is not set, using default path: " + FvmHome)
 	}
 	if !Exists(FvmHome) {
@@ -133,7 +134,12 @@ func Unzip(src, dest string) error {
 }
 
 func Symlink(src, dst string) error {
-	return Execute("ln", "-sf", src, dst)
+	switch GetOS() {
+	case "windows":
+		return Execute("cmd", "/c", "mklink", "/D", dst, src)
+	default:
+		return Execute("ln", "-s", src, dst)
+	}
 }
 
 func IsSymlink(name string) (bool, error) {
@@ -211,4 +217,13 @@ func AppendIfNotContains(path string, lines2Add []string) error {
 		}
 	}
 	return nil
+}
+
+func DownloadFile(url string, dest string) error {
+	switch GetOS() {
+	case "windows":
+		return Execute("powershell", "Invoke-WebRequest", "-Uri", url, "-OutFile", dest)
+	default:
+		return Execute("wget", "-O", dest, url)
+	}
 }

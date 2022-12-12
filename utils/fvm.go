@@ -146,7 +146,7 @@ func Install(r model.Release) error {
 		}()
 		term.Info("Downloading " + url)
 
-		err := Execute("wget", "-O", archieve, url)
+		err := DownloadFile(url, archieve)
 		if err != nil {
 			return err
 		}

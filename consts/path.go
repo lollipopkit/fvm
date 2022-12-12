@@ -19,3 +19,9 @@ const (
 var (
 	HOME = os.Getenv("HOME")
 )
+
+func init() {
+	if HOME == "" {
+		HOME = os.Getenv("USERPROFILE")
+	}
+}
