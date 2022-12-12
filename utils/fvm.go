@@ -190,7 +190,12 @@ func Global(version string) error {
 
 	dst := filepath.Join(FvmHome, "global")
 
-	err := Symlink(installPath, dst)
+	err := Execute("rm", "-rf", dst)
+	if err != nil {
+		return err
+	}
+
+	err = Symlink(installPath, dst)
 	if err != nil {
 		return err
 	}
