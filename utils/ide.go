@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -11,16 +12,16 @@ import (
 )
 
 func vscode() error {
-	var now gjson.Result
-	if Exists(consts.VscodeSettingPath) {
-		data, err := os.ReadFile(consts.VscodeSettingPath)
-		if err != nil {
+	data, err := os.ReadFile(consts.VscodeSettingPath)
+	if err != nil {
+		if !Exists(consts.VscodeSettingPath) {
+			data = []byte("{}")
+		} else {
 			return err
 		}
-
-		now = gjson.ParseBytes(data)
-
 	}
+
+	now := gjson.ParseBytes(data)
 	add := gjson.Parse(consts.VSC_CONFIG)
 	combined := map[string]any{}
 	for k, v := range now.Map() {
@@ -30,13 +31,17 @@ func vscode() error {
 		combined[k] = v.Value()
 	}
 
-	bytes, err := json.MarshalIndent(combined, "", "  ")
+	_bytes, err := json.MarshalIndent(combined, "", "  ")
 	if err != nil {
 		return err
 	}
 
+	if bytes.Equal(_bytes, data) {
+		return nil
+	}
+
 	println()
-	print(string(bytes))
+	print(string(_bytes))
 
 	write := term.Confirm(fmt.Sprintf("\nWrite above content into %s?", consts.VscodeSettingPath), true)
 	if write {
@@ -46,7 +51,7 @@ func vscode() error {
 				return err
 			}
 		}
-		if err = os.WriteFile(consts.VscodeSettingPath, bytes, 0644); err != nil {
+		if err = os.WriteFile(consts.VscodeSettingPath, _bytes, 0644); err != nil {
 			return err
 		}
 		term.Success("Configured VSCode.")

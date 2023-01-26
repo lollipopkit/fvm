@@ -20,7 +20,6 @@ func ConfigGitIgnore() error {
 		if err != nil {
 			return err
 		}
-		term.Success(".gitignore already configured. Skip.")
 		return nil
 	} else {
 		if err := os.WriteFile(gitIgnoreFile, []byte(consts.FvmDirName), 0644); err != nil {

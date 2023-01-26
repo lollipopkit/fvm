@@ -251,11 +251,9 @@ func Use(v string) error {
 		return err
 	}
 
-	println()
 	if err = ConfigGitIgnore(); err != nil {
 		return err
 	}
-	println()
 
 	term.Success("Project Flutter -> " + v)
 	return nil
