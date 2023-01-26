@@ -24,10 +24,25 @@ func handleUse(ctx *cli.Context) error {
 		term.Warn("Usage: " + ctx.Command.UsageText)
 	}
 
-	err := utils.Use(args.Get(0))
+	version := args.Get(0)
+	err := utils.Use(version)
 	if err != nil {
 		if err == utils.ErrVersionNotInstalled {
 			term.Warn(err.Error())
+			confirm := term.Confirm("Do you want to install it?", true)
+			if confirm {
+				releases, err := utils.GetReleases()
+				if err != nil {
+					return err
+				}
+
+				release, err := utils.GetReleaseByVersion(releases ,version)
+				if err != nil {
+					return err
+				}
+
+				return utils.Install(release)
+			}
 		} else {
 			return err
 		}
