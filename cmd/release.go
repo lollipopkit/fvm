@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"sort"
+	"strings"
 
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/model"
@@ -53,16 +54,20 @@ func handleRelease(ctx *cli.Context) error {
 	sort.Strings(majorVersions)
 	println()
 
-	for _, majorVersion := range majorVersions {
+	for majorIdx, majorVersion := range majorVersions {
 		term.Success(fmt.Sprintf("[%s.x]:", majorVersion))
 		count := 0
 		printText := ""
-		for idx := range majorVersionsMap[majorVersion] {
+		for _, release := range majorVersionsMap[majorVersion] {
+			// Skip all pre-release or dev-release in outdated major version
+			if majorIdx != len(majorVersions) - 1 && strings.Contains(release.Version, "-") {
+				continue
+			}
 			count++
 			if count > 5 {
 				break
 			}
-			printText += majorVersionsMap[majorVersion][idx].Version + "\n"
+			printText += release.Version + "\n"
 		}
 
 		print(printText)
