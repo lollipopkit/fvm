@@ -41,7 +41,11 @@ func handleUse(ctx *cli.Context) error {
 					return err
 				}
 
-				return utils.Install(release)
+				err = utils.Install(release)
+				if err != nil {
+					return err
+				}
+				return utils.Use(version)
 			}
 		} else {
 			return err
