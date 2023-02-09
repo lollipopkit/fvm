@@ -65,20 +65,13 @@ func idea() error {
 }
 
 func ConfigIde() error {
-	if Exists(consts.VscodeDirName) {
+	if os.Getenv("VSCODE_INJECTION") != "" {
 		return vscode()
 	}
-	if Exists(consts.IdeaDirName) {
-		return idea()
+	err := vscode()
+	if err != nil {
+		return err
 	}
 
-	options := []string{"VSCode", "IDEA", "skip"}
-	idx := term.Option("Which IDE do you want to auto config?", options, len(options)-1)
-	switch idx {
-	case 0:
-		return vscode()
-	case 1:
-		return idea()
-	}
-	return nil
+	return idea()
 }
