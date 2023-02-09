@@ -107,13 +107,13 @@ AGAIN:
 	return
 }
 
-func Install(r model.Release) error {
+func Install(r model.Release, force bool) error {
 	tmp := strings.Split(r.Archive, "/")
 	if len(tmp) < 3 {
 		return fmt.Errorf("Invalid archive name: %s", r.Archive)
 	}
 	fileName := tmp[2]
-	if IsVersionInstalled(r.Version) {
+	if IsVersionInstalled(r.Version) && !force {
 		term.Warn("\nVersion " + r.Version + " already installed")
 		redownload := term.Confirm("Do you want to redownload it?", false)
 		if !redownload {
@@ -272,4 +272,17 @@ func TestFlutter() error {
 func IsVersionInstalled(version string) bool {
 	installPath := filepath.Join(FvmHome, version, "flutter")
 	return Exists(installPath)
+}
+
+func Delete(version string) error {
+	installPath := filepath.Join(FvmHome, version)
+	if !Exists(installPath) {
+		return ErrVersionNotInstalled
+	}
+
+	err := os.RemoveAll(installPath)
+	if err != nil {
+		return err
+	}
+	return nil
 }

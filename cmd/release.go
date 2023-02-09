@@ -60,7 +60,7 @@ func handleRelease(ctx *cli.Context) error {
 		printText := ""
 		for _, release := range majorVersionsMap[majorVersion] {
 			// Skip all pre-release or dev-release in outdated major version
-			if majorIdx != len(majorVersions) - 1 && strings.Contains(release.Version, "-") {
+			if majorIdx != len(majorVersions)-1 && strings.Contains(release.Version, "-") {
 				continue
 			}
 			count++

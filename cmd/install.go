@@ -9,10 +9,17 @@ import (
 
 func init() {
 	cmds = append(cmds, &cli.Command{
-		Name:      "install",
-		Aliases:   []string{"i"},
-		Usage:     "Install a specific version of Flutter",
-		Action:    handleInstall,
+		Name:    "install",
+		Aliases: []string{"i"},
+		Usage:   "Install a specific version of Flutter",
+		Action:  handleInstall,
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:    consts.FlagForce,
+				Aliases: []string{"f"},
+				Usage:   "Force install",
+			},
+		},
 		ArgsUsage: "[version]",
 		UsageText: consts.APP_NAME + " install [version]",
 	})
@@ -42,7 +49,7 @@ func handleInstall(ctx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	err = utils.Install(r)
+	err = utils.Install(r, ctx.Bool(consts.FlagForce))
 	if err != nil {
 		return err
 	}
