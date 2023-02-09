@@ -42,6 +42,7 @@
 命令:
    config, c   更改某些配置
    dart, d     代理dart命令
+   delete, D   删除特定版本的Flutter SDK
    flutter, f  代理flutter命令
    global, g   设置全局默认Flutter SDK版本
    install, i  安装特定版本的Flutter SDK

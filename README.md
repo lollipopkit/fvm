@@ -43,6 +43,7 @@ USAGE:
 COMMANDS:
    config, c   Config something
    dart, d     Proxy dart commands
+   delete, D   Delete a specific version of Flutter
    flutter, f  Proxy flutter commands
    global, g   Manage global version of Flutter
    install, i  Install a specific version of Flutter
