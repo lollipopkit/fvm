@@ -63,6 +63,9 @@ func handleRelease(ctx *cli.Context) error {
 			if majorIdx != len(majorVersions)-1 && strings.Contains(release.Version, "-") {
 				continue
 			}
+			if release.DartSdkArch != utils.GetArch() {
+				continue
+			}
 			count++
 			if count > 5 {
 				break

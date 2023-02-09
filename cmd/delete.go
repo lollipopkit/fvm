@@ -10,7 +10,7 @@ import (
 func init() {
 	cmds = append(cmds, &cli.Command{
 		Name:      "delete",
-		Aliases:   []string{"d"},
+		Aliases:   []string{"D"},
 		Usage:     "Delete a specific version of Flutter",
 		Action:    handleDelete,
 		ArgsUsage: "[version]",
