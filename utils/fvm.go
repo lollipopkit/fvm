@@ -20,9 +20,11 @@ var (
 	ErrVersionNotInstalled = errors.New("Version not installed. \nPlease install it before using.")
 
 	envNames4JudgeInChina = map[string][]string{
-		"TZ":     {"Asia/Shanghai", "Asia/Chongqing"},
-		"LC_ALL": {"zh_CN.UTF-8", "zh_CN.GB18030", "zh_CN.GBK"},
-		"LANG":   {"zh_CN.UTF-8", "zh_CN.GB18030", "zh_CN.GBK"},
+		"TZ":                       {"Asia/Shanghai", "Asia/Chongqing"},
+		"LC_ALL":                   {"zh_CN.UTF-8", "zh_CN.GB18030", "zh_CN.GBK"},
+		"LANG":                     {"zh_CN.UTF-8", "zh_CN.GB18030", "zh_CN.GBK"},
+		"FLUTTER_STORAGE_BASE_URL": {"https://storage.flutter-io.cn"},
+		"PUB_HOSTED_URL":           {"https://pub.flutter-io.cn"},
 	}
 )
 
@@ -232,12 +234,8 @@ func Use(v string) error {
 	}
 
 	dst := filepath.Join(wd, consts.FvmDirName)
-
-	if Exists(dst) {
-		err = os.RemoveAll(dst)
-		if err != nil {
-			return err
-		}
+	err = os.RemoveAll(dst)
+	if err == nil {
 		term.Success("Removed old version: " + dst)
 	}
 

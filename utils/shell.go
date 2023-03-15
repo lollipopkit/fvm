@@ -13,6 +13,7 @@ var (
 	RcPath    string
 	ShellName string
 
+	errNone                = errors.New("")
 	ErrShellConfigNotFound = errNone
 	ErrUnsupportedShell    = errNone
 )

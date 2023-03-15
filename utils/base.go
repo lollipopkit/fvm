@@ -18,8 +18,9 @@ import (
 
 var (
 	ErrUnsuppotedCompressFormat = fmt.Errorf("unsupported compress format")
-	FvmHome                     = os.Getenv(consts.FVM_HOME)
-	errNone                     = errors.New("")
+	errWinDevModeOff            = errors.New("You may need to turn on 'Developer mode'")
+
+	FvmHome = os.Getenv(consts.FVM_HOME)
 )
 
 func init() {
@@ -135,7 +136,11 @@ func Unzip(src, dest string) error {
 func Symlink(src, dst string) error {
 	switch GetOS() {
 	case "windows":
-		return Execute("cmd", "/c", "mklink", "/D", dst, src)
+		err := Execute("mklink", "/d", dst, src)
+		if err != nil {
+			return errors.Join(errWinDevModeOff, err)
+		}
+		return err
 	default:
 		return Execute("ln", "-s", src, dst)
 	}
