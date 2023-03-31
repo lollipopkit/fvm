@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/lollipopkit/fvm/term"
+	"github.com/lollipopkit/gommon/term"
 )
 
 func ConfigPath() error {

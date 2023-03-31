@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/lollipopkit/fvm/consts"
-	"github.com/lollipopkit/fvm/term"
+	"github.com/lollipopkit/gommon/term"
 	"github.com/tidwall/gjson"
 )
 
@@ -40,10 +40,9 @@ func vscode() error {
 		return nil
 	}
 
-	println()
 	print(string(_bytes))
 
-	write := term.Confirm(fmt.Sprintf("\nWrite above content into %s?", consts.VscodeSettingPath), true)
+	write := term.Confirm(fmt.Sprintf("Write above content into %s?", consts.VscodeSettingPath), true)
 	if write {
 		if !Exists(consts.VscodeDirName) {
 			err = os.Mkdir(consts.VscodeDirName, 0755)
@@ -54,7 +53,7 @@ func vscode() error {
 		if err = os.WriteFile(consts.VscodeSettingPath, _bytes, 0644); err != nil {
 			return err
 		}
-		term.Success("Configured VSCode.")
+		term.Suc("Configured VSCode.")
 	}
 	return nil
 }

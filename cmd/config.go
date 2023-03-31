@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"github.com/lollipopkit/fvm/consts"
-	"github.com/lollipopkit/fvm/term"
 	"github.com/lollipopkit/fvm/utils"
+	"github.com/lollipopkit/gommon/term"
 	"github.com/urfave/cli/v2"
 )
 

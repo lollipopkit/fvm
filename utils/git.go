@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/lollipopkit/fvm/consts"
-	"github.com/lollipopkit/fvm/term"
+	"github.com/lollipopkit/gommon/term"
 )
 
 func ConfigGitIgnore() error {
@@ -26,6 +26,6 @@ func ConfigGitIgnore() error {
 			return err
 		}
 	}
-	term.Success("Configured .gitignore")
+	term.Suc("Configured .gitignore")
 	return nil
 }

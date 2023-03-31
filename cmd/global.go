@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"github.com/lollipopkit/fvm/consts"
-	"github.com/lollipopkit/fvm/term"
 	"github.com/lollipopkit/fvm/utils"
+	"github.com/lollipopkit/gommon/term"
 	"github.com/urfave/cli/v2"
 )
 
@@ -22,6 +22,7 @@ func handleGlobal(ctx *cli.Context) error {
 	args := ctx.Args()
 	if args.Len() != 1 {
 		term.Warn("Usage: " + ctx.Command.UsageText)
+		return nil
 	}
 
 	err := utils.Global(args.Get(0))

@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/lollipopkit/fvm/term"
+	"github.com/lollipopkit/gommon/term"
 )
 
 var (
@@ -20,7 +20,7 @@ func (fishAliasConfiger) SetAlias() error {
 		if err != nil {
 			return err
 		}
-		term.Success("Configured %s", RcPath)
+		term.Suc("Configured %s", RcPath)
 		return nil
 	}
 

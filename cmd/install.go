@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"github.com/lollipopkit/fvm/consts"
-	"github.com/lollipopkit/fvm/term"
 	"github.com/lollipopkit/fvm/utils"
+	"github.com/lollipopkit/gommon/term"
 	"github.com/urfave/cli/v2"
 )
 
@@ -28,6 +28,7 @@ func init() {
 func handleInstall(ctx *cli.Context) error {
 	if ctx.Args().Len() != 1 {
 		term.Warn("Usage: " + ctx.Command.UsageText)
+		return nil
 	}
 
 	releases, err := utils.GetReleases()

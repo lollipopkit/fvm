@@ -13,7 +13,7 @@ import (
 	"strings"
 
 	"github.com/lollipopkit/fvm/consts"
-	"github.com/lollipopkit/fvm/term"
+	"github.com/lollipopkit/gommon/term"
 )
 
 var (
@@ -31,7 +31,7 @@ func init() {
 	if !Exists(FvmHome) {
 		err := os.MkdirAll(FvmHome, 0755)
 		if err != nil {
-			term.Error("Failed to create FVM_HOME: " + FvmHome)
+			term.Err("Failed to create FVM_HOME: " + FvmHome)
 			os.Exit(1)
 		}
 	}

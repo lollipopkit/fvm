@@ -10,14 +10,15 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/model"
-	"github.com/lollipopkit/fvm/term"
+	"github.com/lollipopkit/gommon/term"
 )
 
 var (
-	ErrVersionNotInstalled = errors.New("Version not installed. \nPlease install it before using.")
+	ErrVersionNotInstalled = errors.New("Version not installed. Please install it before using.")
 
 	envNames4JudgeInChina = map[string][]string{
 		"TZ":                       {"Asia/Shanghai", "Asia/Chongqing"},
@@ -26,6 +27,7 @@ var (
 		"FLUTTER_STORAGE_BASE_URL": {"https://storage.flutter-io.cn"},
 		"PUB_HOSTED_URL":           {"https://pub.flutter-io.cn"},
 	}
+	spinner = term.NewSpinner(term.Frames1, 100*time.Millisecond)
 )
 
 func JudgeUseMirror(notify bool) bool {
@@ -48,7 +50,7 @@ func JudgeUseMirror(notify bool) bool {
 		Config.UseMirror = &result
 		err := SaveConfig()
 		if err != nil {
-			term.Error("Save config failed: " + err.Error())
+			term.Err("Save config failed: " + err.Error())
 		}
 	}
 
@@ -116,7 +118,7 @@ func Install(r model.Release, force bool) error {
 	}
 	fileName := tmp[2]
 	if IsVersionInstalled(r.Version) && !force {
-		term.Warn("\nVersion " + r.Version + " already installed")
+		term.Warn("Version " + r.Version + " already installed")
 		redownload := term.Confirm("Do you want to redownload it?", false)
 		if !redownload {
 			return nil
@@ -125,6 +127,8 @@ func Install(r model.Release, force bool) error {
 
 	archieve := filepath.Join(FvmHome, fileName)
 
+
+	
 	download := true
 	if Exists(archieve) {
 		hash, err := GetFileHash(archieve)
@@ -146,7 +150,7 @@ func Install(r model.Release, force bool) error {
 			}
 			return consts.ReleaseUrlPrefix + consts.ReleasePath + r.Archive
 		}()
-		term.Info("Downloading " + url)
+		spinner.SetString("Downloading " + url)
 
 		err := DownloadFile(url, archieve)
 		if err != nil {
@@ -154,7 +158,9 @@ func Install(r model.Release, force bool) error {
 		}
 	}
 
-	term.Info("Checking SHA256...")
+	spinner.SetString("Checking SHA256...")
+	spinner.Start()
+	defer spinner.Stop()
 	hash, err := GetFileHash(archieve)
 	if err != nil {
 		return err
@@ -163,7 +169,7 @@ func Install(r model.Release, force bool) error {
 		return fmt.Errorf("SHA256 not match, expect %s, got %s", r.Sha256, hash)
 	}
 
-	term.Info("Uncompressing " + fileName)
+	spinner.SetString("Uncompressing " + fileName)
 	err = os.Mkdir(filepath.Join(FvmHome, r.Version), 0755)
 	if err != nil {
 		return err
@@ -173,13 +179,13 @@ func Install(r model.Release, force bool) error {
 		return err
 	}
 
-	term.Info("Removing " + fileName)
+	spinner.SetString("Removing " + fileName)
 	err = os.Remove(archieve)
 	if err != nil {
 		return err
 	}
 
-	term.Success("Version " + r.Version + " installed successfully")
+	spinner.SetString("Version " + r.Version + " installed successfully")
 
 	return nil
 }
@@ -218,7 +224,7 @@ func Global(version string) error {
 		}
 	}
 
-	term.Success("Global version -> " + version)
+	term.Suc("Global version -> " + version)
 	return nil
 }
 
@@ -236,14 +242,14 @@ func Use(v string) error {
 	dst := filepath.Join(wd, consts.FvmDirName)
 	err = os.RemoveAll(dst)
 	if err == nil {
-		term.Success("Removed old version: " + dst)
+		term.Suc("Removed old version: " + dst)
 	}
 
 	err = Symlink(installPath, dst)
 	if err != nil {
 		return err
 	}
-	term.Success("Added symlink: " + installPath + " -> " + dst)
+	term.Suc("Added symlink: " + installPath + " -> " + dst)
 
 	if err = ConfigIde(); err != nil {
 		return err
@@ -253,7 +259,7 @@ func Use(v string) error {
 		return err
 	}
 
-	term.Success("Project Flutter -> " + v)
+	term.Suc("Project Flutter -> " + v)
 	return nil
 }
 
