@@ -27,7 +27,7 @@ var (
 		"FLUTTER_STORAGE_BASE_URL": {"https://storage.flutter-io.cn"},
 		"PUB_HOSTED_URL":           {"https://pub.flutter-io.cn"},
 	}
-	spinner = term.NewSpinner(term.Frames1, 100*time.Millisecond)
+	spinner = term.NewSpinner()
 )
 
 func JudgeUseMirror(notify bool) bool {
@@ -118,7 +118,7 @@ func Install(r model.Release, force bool) error {
 	}
 	fileName := tmp[2]
 	if IsVersionInstalled(r.Version) && !force {
-		term.Warn("Version " + r.Version + " already installed")
+		term.Warn("Version " + r.Version + " already installed.")
 		redownload := term.Confirm("Do you want to redownload it?", false)
 		if !redownload {
 			return nil
@@ -126,8 +126,6 @@ func Install(r model.Release, force bool) error {
 	}
 
 	archieve := filepath.Join(FvmHome, fileName)
-
-
 	
 	download := true
 	if Exists(archieve) {
@@ -150,7 +148,6 @@ func Install(r model.Release, force bool) error {
 			}
 			return consts.ReleaseUrlPrefix + consts.ReleasePath + r.Archive
 		}()
-		spinner.SetString("Downloading " + url)
 
 		err := DownloadFile(url, archieve)
 		if err != nil {
@@ -159,8 +156,7 @@ func Install(r model.Release, force bool) error {
 	}
 
 	spinner.SetString("Checking SHA256...")
-	spinner.Start()
-	defer spinner.Stop()
+	spinner.Start(100*time.Millisecond)
 	hash, err := GetFileHash(archieve)
 	if err != nil {
 		return err
@@ -185,7 +181,8 @@ func Install(r model.Release, force bool) error {
 		return err
 	}
 
-	spinner.SetString("Version " + r.Version + " installed successfully")
+	spinner.Stop()
+	term.Info("Version " + r.Version + " installed successfully")
 
 	return nil
 }
@@ -210,7 +207,7 @@ func Global(version string) error {
 
 	err = TestFlutter()
 	if err != nil {
-		term.Warn("It seems like that you have to config PATH.\n")
+		term.Warn("It seems like that you have to config PATH.")
 		confirm := term.Confirm("Do you want to automatically config PATH?", true)
 		if confirm {
 			err = ConfigPath()
@@ -219,7 +216,7 @@ func Global(version string) error {
 			}
 		}
 		if !confirm {
-			term.Warn("\nPlease add the following line to your shell config file:")
+			term.Warn("Please add the following line to your shell config file:")
 			println("export PATH=$PATH:" + filepath.Join(FvmHome, "global", "bin") + "\n")
 		}
 	}

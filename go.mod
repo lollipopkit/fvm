@@ -3,7 +3,7 @@ module github.com/lollipopkit/fvm
 go 1.18
 
 require (
-	github.com/lollipopkit/gommon v0.0.9
+	github.com/lollipopkit/gommon v0.0.11
 	github.com/urfave/cli/v2 v2.25.1
 )
 

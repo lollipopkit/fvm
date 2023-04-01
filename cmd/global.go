@@ -25,10 +25,15 @@ func handleGlobal(ctx *cli.Context) error {
 		return nil
 	}
 
-	err := utils.Global(args.Get(0))
+	ver := args.Get(0)
+	err := utils.Global(ver)
 	if err != nil {
 		if err == utils.ErrVersionNotInstalled {
 			term.Warn(err.Error())
+			confirm := term.Confirm("Install " + ver + " now?", true)
+			if confirm {
+				return install(ver)
+			}
 		} else {
 			return err
 		}
