@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"regexp"
 	"sort"
-	"strings"
 
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/model"
@@ -15,6 +14,8 @@ import (
 
 var (
 	majorVersionReg = regexp.MustCompile(`^v?(\d+)\.\S+$`)
+	// stable: X.X.X
+	stableVersionReg = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
 )
 
 func init() {
@@ -24,10 +25,27 @@ func init() {
 		Usage:     "List all releases of Flutter",
 		Action:    handleRelease,
 		UsageText: consts.APP_NAME + " release",
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:    "stable",
+				Aliases: []string{"s"},
+				Usage:   "List all stable releases of Flutter",
+			},
+			&cli.BoolFlag{
+				Name:    "preview",
+				Aliases: []string{"p", "pre"},
+				Usage:   "List all preview releases of Flutter",
+			},
+		},
 	})
 }
 
 func handleRelease(ctx *cli.Context) error {
+	onlyStable := ctx.Bool("stable")
+	onlyPreview := ctx.Bool("preview")
+	if onlyStable && onlyPreview {
+		return fmt.Errorf("can not use --stable and --preview at the same time")
+	}
 	releases, err := utils.GetReleases()
 	if err != nil {
 		return err
@@ -35,6 +53,12 @@ func handleRelease(ctx *cli.Context) error {
 
 	majorVersionsMap := make(map[string][]model.Release, 0)
 	for idx := range releases {
+		if onlyStable && !stableVersionReg.MatchString(releases[idx].Version) {
+			continue
+		}
+		if onlyPreview && stableVersionReg.MatchString(releases[idx].Version) {
+			continue
+		}
 		m := majorVersionReg.FindStringSubmatch(releases[idx].Version)
 		if len(m) < 2 {
 			continue
@@ -51,26 +75,22 @@ func handleRelease(ctx *cli.Context) error {
 	for k := range majorVersionsMap {
 		majorVersions = append(majorVersions, k)
 	}
-	sort.Strings(majorVersions)
-	println()
+	sort.Sort(sort.Reverse(sort.StringSlice(majorVersions)))
 
-	for majorIdx, majorVersion := range majorVersions {
+	arch := utils.GetArch()
+	for _, majorVersion := range majorVersions {
 		term.Green(fmt.Sprintf("[%s.x]:\n", majorVersion))
 		count := 0
 		printText := ""
 		for _, release := range majorVersionsMap[majorVersion] {
-			// Skip all pre-release or dev-release in outdated major version
-			if majorIdx != len(majorVersions)-1 && strings.Contains(release.Version, "-") {
-				continue
-			}
-			if release.DartSdkArch != utils.GetArch() {
+			if release.DartSdkArch != arch {
 				continue
 			}
 			count++
 			if count > 5 {
 				break
 			}
-			printText += release.Version + "\n"
+			printText += fmt.Sprintf("%s\t%s\t%s\n", release.Version, release.DartSdkVersion, release.ReleaseDate.Format("2006-01-02"))
 		}
 
 		print(printText)
@@ -78,6 +98,7 @@ func handleRelease(ctx *cli.Context) error {
 			term.Yellow(fmt.Sprintf("...and %d more", len(majorVersionsMap[majorVersion])-count))
 		}
 		println()
+		break
 	}
 
 	return nil

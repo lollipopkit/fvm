@@ -27,6 +27,7 @@ func Run() {
 			return nil
 		},
 		Suggest: true,
+		EnableBashCompletion: true,
 	}
 
 	if err := app.Run(os.Args); err != nil {
