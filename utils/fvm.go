@@ -4,17 +4,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
-	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/model"
 	"github.com/lollipopkit/gommon/term"
+	"github.com/lollipopkit/gommon/util"
 )
 
 var (
@@ -27,10 +25,9 @@ var (
 		"FLUTTER_STORAGE_BASE_URL": {"https://storage.flutter-io.cn"},
 		"PUB_HOSTED_URL":           {"https://pub.flutter-io.cn"},
 	}
-	spinner = term.NewSpinner()
 )
 
-func JudgeUseMirror(notify bool) bool {
+func JudgeUseMirror() bool {
 	if Config.UseMirror == nil {
 		china := false
 		for envName, envValues := range envNames4JudgeInChina {
@@ -53,32 +50,33 @@ func JudgeUseMirror(notify bool) bool {
 			term.Err("Save config failed: " + err.Error())
 		}
 	}
-
-	if *Config.UseMirror && notify {
-		term.Info("Using mirror site " + consts.ReleaseChinaUrlPrefix)
-	}
 	return *Config.UseMirror
 }
 
 func GetReleases() (releases []model.Release, err error) {
+	spinner := term.NewSpinner()
+	defer spinner.Stop(true)
 	goos := GetOS()
-	inChina := JudgeUseMirror(true)
+	inChina := JudgeUseMirror()
 	url := func() string {
 		if inChina {
 			return fmt.Sprintf(consts.ReleaseChinaJsonUrlFmt, goos)
 		}
 		return fmt.Sprintf(consts.ReleaseJsonUrlFmt, goos)
 	}()
+	if inChina {
+		spinner.SetString("Using mirror: " + consts.ReleaseChinaUrlPrefix)
+	} else {
+		spinner.SetString("Using official: " + consts.ReleaseUrlPrefix)
+	}
 
-	resp, err := http.Get(url)
-	if err != nil {
+	data, code, err := util.HttpDo("GET", url, nil, nil)
+	if code != 200 || err != nil {
+		if err == nil {
+			err = fmt.Errorf("Get releases failed: code %d", code)
+		}
 		return
 	}
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return
-	}
-	defer resp.Body.Close()
 
 	var allReleases model.AllReleases
 	err = json.Unmarshal(data, &allReleases)
@@ -143,7 +141,7 @@ func Install(r model.Release, force bool) error {
 
 	if download {
 		url := func() string {
-			if JudgeUseMirror(false) {
+			if JudgeUseMirror() {
 				return consts.ReleaseChinaUrlPrefix + consts.ReleasePath + r.Archive
 			}
 			return consts.ReleaseUrlPrefix + consts.ReleasePath + r.Archive
@@ -155,8 +153,9 @@ func Install(r model.Release, force bool) error {
 		}
 	}
 
+	spinner := term.NewSpinner()
+	defer spinner.Stop(true)
 	spinner.SetString("Checking SHA256...")
-	spinner.Start(100*time.Millisecond)
 	hash, err := GetFileHash(archieve)
 	if err != nil {
 		return err
@@ -181,7 +180,6 @@ func Install(r model.Release, force bool) error {
 		return err
 	}
 
-	spinner.Stop()
 	term.Info("Version " + r.Version + " installed successfully")
 
 	return nil
