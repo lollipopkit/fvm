@@ -20,7 +20,18 @@ func init() {
 
 func handleGlobal(ctx *cli.Context) error {
 	args := ctx.Args()
-	if args.Len() != 1 {
+	argsLen := args.Len()
+	if argsLen == 0 {
+		ver, err := utils.GetGlobalVersion()
+		if err != nil {
+			term.Err(err.Error())
+			term.Info("Usage: " + ctx.Command.UsageText)
+			return nil
+		}
+		term.Info("Global version: " + ver)
+		return nil
+	}
+	if argsLen > 1 {
 		term.Warn("Usage: " + ctx.Command.UsageText)
 		return nil
 	}

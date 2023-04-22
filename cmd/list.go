@@ -25,10 +25,18 @@ func handleList(ctx *cli.Context) error {
 		return err
 	}
 
-	term.Cyan("Installed versions:")
+	gVersion, err := utils.GetGlobalVersion()
+	if err != nil {
+		term.Warn("You have not set a global version yet.")
+	}
 	for _, dir := range dirs {
 		if dir.IsDir() {
-			println(dir.Name())
+			dName := dir.Name()
+			if dName == gVersion {
+				term.Yellow(dName + " [GLOBAL]")
+			} else {
+				println(dName)
+			}
 		}
 	}
 

@@ -17,6 +17,7 @@ import (
 
 var (
 	ErrVersionNotInstalled = errors.New("Version not installed. Please install it before using.")
+	ErrGlobalNotSet = errors.New("Global version not set. Please set it before using.")
 
 	envNames4JudgeInChina = map[string][]string{
 		"TZ":                       {"Asia/Shanghai", "Asia/Chongqing"},
@@ -284,4 +285,18 @@ func Delete(version string) error {
 		return err
 	}
 	return nil
+}
+
+func GetGlobalVersion() (string, error) {
+	globalPath := filepath.Join(FvmHome, "global")
+	if !Exists(globalPath) {
+		return "", ErrGlobalNotSet
+	}
+
+	target, err := os.Readlink(globalPath)
+	if err != nil {
+		return "", err
+	}
+
+	return filepath.Base(filepath.Dir(target)), nil
 }

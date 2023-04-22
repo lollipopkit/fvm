@@ -3,7 +3,7 @@ module github.com/lollipopkit/fvm
 go 1.18
 
 require (
-	github.com/lollipopkit/gommon v0.2.1
+	github.com/lollipopkit/gommon v0.2.2
 	github.com/urfave/cli/v2 v2.25.1
 )
 
@@ -15,7 +15,7 @@ require (
 	github.com/containerd/console v1.0.3 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
-	golang.org/x/sys v0.6.0 // indirect
+	golang.org/x/sys v0.7.0 // indirect
 )
 
 require (
