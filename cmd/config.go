@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/utils"
-	"github.com/lollipopkit/gommon/term"
+	"github.com/lollipopkit/gommon/log"
 	"github.com/urfave/cli/v2"
 )
 
@@ -39,7 +39,7 @@ func handleConfigAlias(ctx *cli.Context) error {
 func handleConfigMirror(ctx *cli.Context) error {
 	args := ctx.Args()
 	if args.Len() != 1 {
-		term.Warn("Usage: " + ctx.Command.UsageText)
+		log.Warn("Usage: " + ctx.Command.UsageText)
 		return nil
 	}
 	use := args.Get(0)
@@ -52,6 +52,6 @@ func handleConfigMirror(ctx *cli.Context) error {
 		utils.Config.UseMirror = &a
 		return utils.SaveConfig()
 	}
-	term.Warn("Usage: " + ctx.Command.UsageText)
+	log.Warn("Usage: " + ctx.Command.UsageText)
 	return nil
 }

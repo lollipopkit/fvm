@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/lollipopkit/gommon/term"
+	"github.com/lollipopkit/gommon/log"
 )
 
 func ConfigPath() error {
@@ -33,7 +33,7 @@ func configPath4Bash() error {
 	line2Add := "export PATH=$PATH:" + filepath.Join(FvmHome, "global", "bin")
 	lines := strings.Split(string(content), "\n")
 	if Contains(lines, line2Add) {
-		term.Info("\nPATH already configured. Skip.")
+		log.Info("\nPATH already configured. Skip.")
 	} else {
 		f, err := os.OpenFile(RcPath, os.O_APPEND|os.O_WRONLY, 0600)
 		if err != nil {
@@ -46,7 +46,7 @@ func configPath4Bash() error {
 		}
 	}
 
-	term.Warn("\nPlease run following command to reload shell config file:")
+	log.Warn("\nPlease run following command to reload shell config file:")
 	println("source " + RcPath + "\n")
 	return nil
 }
@@ -64,7 +64,7 @@ func configPath4Fish() error {
 	line2Add := "set PATH " + filepath.Join(FvmHome, "global", "bin") + "$PATH"
 	lines := strings.Split(string(content), "\n")
 	if Contains(lines, line2Add) {
-		term.Info("\nPATH already configured. Skip.")
+		log.Info("\nPATH already configured. Skip.")
 	} else {
 		f, err := os.OpenFile(RcPath, os.O_APPEND|os.O_WRONLY, 0600)
 		if err != nil {
@@ -78,7 +78,7 @@ func configPath4Fish() error {
 		}
 	}
 
-	term.Warn("\nPlease run following command to reload shell config file:")
+	log.Warn("\nPlease run following command to reload shell config file:")
 	println("source " + RcPath + "\n")
 	return nil
 }

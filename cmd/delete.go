@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/utils"
-	"github.com/lollipopkit/gommon/term"
+	"github.com/lollipopkit/gommon/log"
 	"github.com/urfave/cli/v2"
 )
 
@@ -20,22 +20,22 @@ func init() {
 
 func handleDelete(ctx *cli.Context) error {
 	if ctx.Args().Len() != 1 {
-		term.Warn("Usage: " + ctx.Command.UsageText)
+		log.Warn("Usage: " + ctx.Command.UsageText)
 		return nil
 	}
 
 	version := ctx.Args().Get(0)
 	if !utils.IsVersionInstalled(version) {
-		term.Warn("Version [" + version + "] is not installed")
+		log.Warn("Version [" + version + "] is not installed")
 		return nil
 	}
 
 	err := utils.Delete(version)
 	if err != nil {
-		term.Warn("Failed to delete version [" + version + "]")
+		log.Warn("Failed to delete version [" + version + "]")
 		return err
 	}
 
-	term.Suc("Deleted version [" + version + "]")
+	log.Suc("Deleted version [" + version + "]")
 	return nil
 }

@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/utils"
+	"github.com/lollipopkit/gommon/log"
 	"github.com/lollipopkit/gommon/term"
 	"github.com/urfave/cli/v2"
 )
@@ -28,7 +29,7 @@ func init() {
 func handleUse(ctx *cli.Context) error {
 	args := ctx.Args()
 	if args.Len() != 1 {
-		term.Warn("Usage: " + ctx.Command.UsageText)
+		log.Warn("Usage: " + ctx.Command.UsageText)
 		return nil
 	}
 
@@ -36,7 +37,7 @@ func handleUse(ctx *cli.Context) error {
 	err := utils.Use(version)
 	if err != nil {
 		if err == utils.ErrVersionNotInstalled {
-			term.Warn(err.Error() + "\n")
+			log.Warn(err.Error() + "\n")
 			if ctx.Bool(consts.FlagForce) || term.Confirm("Do you want to install it?", true) {
 				return install(version)
 			}

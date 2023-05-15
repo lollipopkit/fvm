@@ -8,7 +8,7 @@ import (
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/model"
 	"github.com/lollipopkit/fvm/utils"
-	"github.com/lollipopkit/gommon/term"
+	"github.com/lollipopkit/gommon/log"
 	"github.com/urfave/cli/v2"
 )
 
@@ -79,7 +79,7 @@ func handleRelease(ctx *cli.Context) error {
 
 	arch := utils.GetArch()
 	for _, majorVersion := range majorVersions {
-		term.Green(fmt.Sprintf("[%s.x]:\n", majorVersion))
+		log.Green(fmt.Sprintf("[%s.x]:\n", majorVersion))
 		count := 0
 		printText := ""
 		for _, release := range majorVersionsMap[majorVersion] {
@@ -95,7 +95,7 @@ func handleRelease(ctx *cli.Context) error {
 
 		print(printText)
 		if count > 5 {
-			term.Yellow(fmt.Sprintf("...and %d more", len(majorVersionsMap[majorVersion])-count))
+			log.Cyan(fmt.Sprintf("...and %d more", len(majorVersionsMap[majorVersion])-count))
 		}
 		println()
 		break

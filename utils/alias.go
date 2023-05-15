@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/lollipopkit/gommon/term"
+	"github.com/lollipopkit/gommon/log"
 )
 
 var (
@@ -20,7 +20,7 @@ func (fishAliasConfiger) SetAlias() error {
 		if err != nil {
 			return err
 		}
-		term.Suc("Configured %s", RcPath)
+		log.Suc("Configured %s", RcPath)
 		return nil
 	}
 
@@ -41,7 +41,7 @@ func SetAlias() error {
 		return err
 	}
 
-	term.Warn("\nPlease run following command to reload shell config file:")
+	log.Warn("\nPlease run following command to reload shell config file:")
 	println("source " + RcPath)
 	return nil
 }

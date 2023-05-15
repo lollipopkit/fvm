@@ -13,7 +13,7 @@ import (
 	"strings"
 
 	"github.com/lollipopkit/fvm/consts"
-	"github.com/lollipopkit/gommon/term"
+	"github.com/lollipopkit/gommon/log"
 )
 
 var (
@@ -26,12 +26,12 @@ var (
 func init() {
 	if FvmHome == "" {
 		FvmHome = filepath.Join(consts.HOME, ".fvm")
-		term.Warn("FVM_HOME is not set, using default path: " + FvmHome)
+		log.Warn("FVM_HOME is not set, using default path: " + FvmHome)
 	}
 	if !Exists(FvmHome) {
 		err := os.MkdirAll(FvmHome, 0755)
 		if err != nil {
-			term.Err("Failed to create FVM_HOME: " + FvmHome)
+			log.Err("Failed to create FVM_HOME: " + FvmHome)
 			os.Exit(1)
 		}
 	}
@@ -151,7 +151,7 @@ func IsSymlink(name string) (bool, error) {
 	if os.IsNotExist(err) {
 		return false, err
 	} else if err != nil {
-		term.Warn("Error when check symlink: " + err.Error())
+		log.Warn("Error when check symlink: " + err.Error())
 		return false, err
 	}
 	return (info.Mode() & os.ModeSymlink) != 0, nil

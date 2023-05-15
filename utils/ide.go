@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/lollipopkit/fvm/consts"
+	"github.com/lollipopkit/gommon/log"
 	"github.com/lollipopkit/gommon/term"
 	"github.com/tidwall/gjson"
 )
@@ -53,13 +54,13 @@ func vscode() error {
 		if err = os.WriteFile(consts.VscodeSettingPath, _bytes, 0644); err != nil {
 			return err
 		}
-		term.Suc("Configured VSCode.")
+		log.Suc("Configured VSCode.")
 	}
 	return nil
 }
 
 func idea() error {
-	term.Warn("IDEA is not supported yet.")
+	log.Warn("IDEA is not supported yet.")
 	return nil
 }
 

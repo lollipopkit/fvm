@@ -5,7 +5,7 @@ import (
 
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/utils"
-	"github.com/lollipopkit/gommon/term"
+	"github.com/lollipopkit/gommon/log"
 	"github.com/urfave/cli/v2"
 )
 
@@ -27,13 +27,13 @@ func handleList(ctx *cli.Context) error {
 
 	gVersion, err := utils.GetGlobalVersion()
 	if err != nil {
-		term.Warn("You have not set a global version yet.")
+		log.Warn("You have not set a global version yet.")
 	}
 	for _, dir := range dirs {
 		if dir.IsDir() {
 			dName := dir.Name()
 			if dName == gVersion {
-				term.Yellow(dName + " [GLOBAL]")
+				log.Yellow(dName + " [GLOBAL]\n")
 			} else {
 				println(dName)
 			}

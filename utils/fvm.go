@@ -11,13 +11,14 @@ import (
 
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/model"
+	"github.com/lollipopkit/gommon/log"
 	"github.com/lollipopkit/gommon/term"
 	"github.com/lollipopkit/gommon/util"
 )
 
 var (
 	ErrVersionNotInstalled = errors.New("Version not installed. Please install it before using.")
-	ErrGlobalNotSet = errors.New("Global version not set. Please set it before using.")
+	ErrGlobalNotSet        = errors.New("Global version not set. Please set it before using.")
 
 	envNames4JudgeInChina = map[string][]string{
 		"TZ":                       {"Asia/Shanghai", "Asia/Chongqing"},
@@ -48,7 +49,7 @@ func JudgeUseMirror() bool {
 		Config.UseMirror = &result
 		err := SaveConfig()
 		if err != nil {
-			term.Err("Save config failed: " + err.Error())
+			log.Err("Save config failed: " + err.Error())
 		}
 	}
 	return *Config.UseMirror
@@ -101,7 +102,7 @@ AGAIN:
 	}
 
 	if arch == "arm64" {
-		term.Warn("No arm64 version found, will use x64 version.")
+		log.Warn("No arm64 version found, will use x64 version.")
 		arch = "x64"
 		goto AGAIN
 	}
@@ -117,7 +118,7 @@ func Install(r model.Release, force bool) error {
 	}
 	fileName := tmp[2]
 	if IsVersionInstalled(r.Version) && !force {
-		term.Warn("Version " + r.Version + " already installed.")
+		log.Warn("Version " + r.Version + " already installed.")
 		redownload := term.Confirm("Do you want to redownload it?", false)
 		if !redownload {
 			return nil
@@ -125,7 +126,7 @@ func Install(r model.Release, force bool) error {
 	}
 
 	archieve := filepath.Join(FvmHome, fileName)
-	
+
 	download := true
 	if Exists(archieve) {
 		hash, err := GetFileHash(archieve)
@@ -133,10 +134,10 @@ func Install(r model.Release, force bool) error {
 			return err
 		}
 		if hash == r.Sha256 {
-			term.Warn("Archive already exists, skip downloading.")
+			log.Warn("Archive already exists, skip downloading.")
 			download = false
 		} else {
-			term.Warn("Archive already exists, but hash not match, will download again.")
+			log.Warn("Archive already exists, but hash not match, will download again.")
 		}
 	}
 
@@ -181,7 +182,7 @@ func Install(r model.Release, force bool) error {
 		return err
 	}
 
-	term.Info("Version " + r.Version + " installed successfully")
+	log.Info("Version " + r.Version + " installed successfully")
 
 	return nil
 }
@@ -206,7 +207,7 @@ func Global(version string) error {
 
 	err = TestFlutter()
 	if err != nil {
-		term.Warn("It seems like that you have to config PATH.")
+		log.Warn("It seems like that you have to config PATH.")
 		confirm := term.Confirm("Do you want to automatically config PATH?", true)
 		if confirm {
 			err = ConfigPath()
@@ -215,12 +216,12 @@ func Global(version string) error {
 			}
 		}
 		if !confirm {
-			term.Warn("Please add the following line to your shell config file:")
+			log.Warn("Please add the following line to your shell config file:")
 			println("export PATH=$PATH:" + filepath.Join(FvmHome, "global", "bin") + "\n")
 		}
 	}
 
-	term.Suc("Global version -> " + version)
+	log.Suc("Global version -> " + version)
 	return nil
 }
 
@@ -238,14 +239,14 @@ func Use(v string) error {
 	dst := filepath.Join(wd, consts.FvmDirName)
 	err = os.RemoveAll(dst)
 	if err == nil {
-		term.Suc("Removed old version: " + dst)
+		log.Suc("Removed old version: " + dst)
 	}
 
 	err = Symlink(installPath, dst)
 	if err != nil {
 		return err
 	}
-	term.Suc("Added symlink: " + installPath + " -> " + dst)
+	log.Suc("Added symlink: " + installPath + " -> " + dst)
 
 	if err = ConfigIde(); err != nil {
 		return err
@@ -255,7 +256,7 @@ func Use(v string) error {
 		return err
 	}
 
-	term.Suc("Project Flutter -> " + v)
+	log.Suc("Project Flutter -> " + v)
 	return nil
 }
 

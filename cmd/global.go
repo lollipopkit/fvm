@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/lollipopkit/fvm/consts"
 	"github.com/lollipopkit/fvm/utils"
+	"github.com/lollipopkit/gommon/log"
 	"github.com/lollipopkit/gommon/term"
 	"github.com/urfave/cli/v2"
 )
@@ -24,15 +25,15 @@ func handleGlobal(ctx *cli.Context) error {
 	if argsLen == 0 {
 		ver, err := utils.GetGlobalVersion()
 		if err != nil {
-			term.Err(err.Error())
-			term.Info("Usage: " + ctx.Command.UsageText)
+			log.Err(err.Error())
+			log.Info("Usage: " + ctx.Command.UsageText)
 			return nil
 		}
-		term.Info("Global version: " + ver)
+		log.Info("Global version: " + ver)
 		return nil
 	}
 	if argsLen > 1 {
-		term.Warn("Usage: " + ctx.Command.UsageText)
+		log.Warn("Usage: " + ctx.Command.UsageText)
 		return nil
 	}
 
@@ -40,8 +41,8 @@ func handleGlobal(ctx *cli.Context) error {
 	err := utils.Global(ver)
 	if err != nil {
 		if err == utils.ErrVersionNotInstalled {
-			term.Warn(err.Error())
-			confirm := term.Confirm("Install " + ver + " now?", true)
+			log.Warn(err.Error())
+			confirm := term.Confirm("Install "+ver+" now?", true)
 			if confirm {
 				return install(ver)
 			}

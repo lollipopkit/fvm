@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/lollipopkit/fvm/consts"
-	"github.com/lollipopkit/gommon/term"
+	"github.com/lollipopkit/gommon/log"
 	"github.com/urfave/cli/v2"
 )
 
@@ -26,11 +26,11 @@ func Run() {
 			}
 			return nil
 		},
-		Suggest: true,
+		Suggest:              true,
 		EnableBashCompletion: true,
 	}
 
 	if err := app.Run(os.Args); err != nil {
-		term.Err(err.Error(), true)
+		log.Err(err.Error(), true)
 	}
 }
