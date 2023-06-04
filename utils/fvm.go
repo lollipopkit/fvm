@@ -57,7 +57,7 @@ func JudgeUseMirror() bool {
 
 func GetReleases() (releases []model.Release, err error) {
 	spinner := term.NewSpinner()
-	defer spinner.Stop(true)
+	defer spinner.Stop(false)
 	goos := GetOS()
 	inChina := JudgeUseMirror()
 	url := func() string {
@@ -156,7 +156,7 @@ func Install(r model.Release, force bool) error {
 	}
 
 	spinner := term.NewSpinner()
-	defer spinner.Stop(true)
+	defer spinner.Stop(false)
 	spinner.SetString("Checking SHA256...")
 	hash, err := GetFileHash(archieve)
 	if err != nil {
@@ -182,7 +182,7 @@ func Install(r model.Release, force bool) error {
 		return err
 	}
 
-	log.Info("Version " + r.Version + " installed successfully")
+	spinner.SetString("Version " + r.Version + " installed successfully")
 
 	return nil
 }
